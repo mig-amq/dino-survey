@@ -5,11 +5,99 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Survey Questionnaire</title>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js' integrity='sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==' crossorigin='anonymous'></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.14/vue.min.js" integrity="sha512-BAMfk70VjqBkBIyo9UTRLl3TBJ3M0c6uyy2VMUrq370bWs7kchLNN9j1WiJQus9JAJVqcriIUX859JOm12LWtw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  
+  <script>
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBQ7xRAjS_F0MG8Eqgv9ztutIhBa8en2RE",
+      authDomain: "dino-survey.firebaseapp.com",
+      projectId: "dino-survey",
+      storageBucket: "dino-survey.appspot.com",
+      messagingSenderId: "361608865739",
+      appId: "1:361608865739:web:f1f45452a317e02b22b84e"
+    };
+  
+    // Initialize Firebase
+    const firebaseApp = firebase.initializeApp(firebaseConfig);
+
+    const db = firebase.firestore(firebaseApp);
+    
+    db.collection('sessions').get('miguelalfonsoquiambao@gmail.com').then((snap) => {
+      console.log(snap)
+    })
+  </script>
+
+  <script src="./js/preload.js"></script>
 </head>
 <body>
+  <div id="app">
+    <vc-form id="main-form" ref="main-form"></vc-form>
+  </div>
+
+
+  <!-- Vue Components-->
+  <script type="text/x-template" id="vc-form">
+    <form :action="action" :method="method" :data-qid="qid" :data-sid="sid" :data-session="session">
+      <vc-text v-if="page == 'vc-text'" ref="text">
+        <p>Self-E[FIX]acy is the ultimate guide to your student problems! Focused on improving
+          students&#39; academic performance, this handout is filled with essential, up-to-date
+          information on the importance of self-efficacy and different study habits that helps aid
+          young learners in their scholastic journey. Using data from the research study of its creators,
+          Self-E[FIX]acy aims to shed light on better, more efficient ways to become an outstanding
+          student - all of the useful information, found in the convenience of one interactive website.
+          Familiarize yourself with the curated list of study habits guaranteed to lead to success; take
+          tests and do fun activities to learn about your own self-efficacy and unique learning style;
+          and get personalized tips and tricks to improve your skills and study like a pro. By the end,
+          you’ll be on track to improving your academic performance in no time. With our help, you’ll
+          be ready to [FIX] your self-efficacy!</p>
+      </vc-text>
+      <vc-card v-if="page == 'vc-card'" ref="card"></vc-card>
+
+      <div class="controls">
+        <button type="button" @click="previousPage" :disabled="disablePrev">Previous</button>
+        <button type="button" @click="nextPage" :disabled="disableNext">Next</button>
+      </div>
+    </form>
+  </script>
+
+  <script type="text/x-template" id="vc-landing">
+
+  </script>
   
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js' integrity='sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==' crossorigin='anonymous'></script>
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.47/vue.global.min.js' integrity='sha512-DJ2+sosWB5FnZAIeCWAHu2gxQ7Gi438oOZLcBQSOrW8gD0s7LIXDv/5RW76B3FcljF40BXnfqNIo6Dhp7dFHJg==' crossorigin='anonymous'></script>
-  <script type="module" src="./js/script.js"></script>
+  <script type="text/x-template" id="vc-card">
+    <div class="card">
+      <div class="card-image"></div>
+      <div class="card-title" v-if="title">{{title}}</div>
+      <div class="card-body">
+        <div class="card-content" v-if="question">{{question}}</div>
+        <ul v-if="answers">
+          <li v-for="(answer, index) in answers">
+            <input type="radio" name="answer" value="{{answer.answer}}" id="answer-{{index}}" required/>
+            <label for="answer-{{index}}" v-if="answer.label">{{answer.label}}</label>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </script>
+
+  <script type="text/x-template" id="vc-text">
+    <div class="text">
+      <div class="title" v-if="title">{{title}}</div>
+      <div class="subtitle" v-if="subtitle">{{subtitle}}</div>
+      <div class="content">
+        <slot></slot>
+        {{content}}
+      </div>
+      <div class="input" v-if="ifInput">
+        <label for="email">Email Address:</label>
+        <input type="email" placeholder="Email Address..." requried/>
+      </div>
+    </div>
+  </script>
+  <script src="./js/script.js"></script>
 </body>
 </html>
