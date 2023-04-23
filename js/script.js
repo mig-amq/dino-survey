@@ -17,7 +17,12 @@ function displayQuestion(_vueObj) {
   _vueObj.$refs.card.horizontal_display = survey.horizontalDisplay
 
   if (survey.hasSameChoices) {
+    let answers = []
+    survey.answers.forEach((element) => {
+      answers.push(element)
+    });
 
+    _vueObj.$refs.card.answers = answers
   } else {
     _vueObj.$refs.card.answers = question.as;
   }
@@ -41,7 +46,7 @@ function displayFinished(_vueObj) {
 
   _vueObj.$refs.texts = null
 
-  if (_vueObj.sid == null && _vueObj.settings.display_all_results_at_end) {
+  if (_vueObj.session.finished || (_vueObj.session.sid == null && _vueObj.settings.display_all_results_at_end)) {
     let texts = []
     let survey_results_keys = Object.keys(_vueObj.survey_results)
 
@@ -231,12 +236,16 @@ function initVueComponents(_V) {
                     this.disableNext = true
                     this.disablePrev = true
 
+                    console.log("displayFinished 1")
                     displayFinished(this)
                   } else {
                     if (this.qid != null && !(this._survey_keys.indexOf(this.sid) == 0 && this.session.qIndex == 0))
                       this.disablePrev = false
 
-                    displayQuestion(this)
+                      if (this.sid != null && this.qid == null && this.session.qIndex == -1)
+                        this.nextPage(event)
+                      else
+                        displayQuestion(this)
                   }
                   
                 } else {
@@ -284,6 +293,9 @@ function initVueComponents(_V) {
                          this.session._survey_keys.indexOf(this.session.sid) >= this.session._survey_keys.length - 1) {
                   // move to finished
                   this.session.finished = true
+                  this.session.sid = null
+                  this.session.qid = null
+                  this.session.qIndex = 0
                   
                   saveSession(this, db).then(((snap) => {
                     this.disableNext = true
@@ -291,6 +303,7 @@ function initVueComponents(_V) {
                     this.sid = null
                     this.qid = null
                     
+                    console.log("displayFinished 2")
                     displayFinished(this)
                   }).bind(this))
                 }
@@ -318,6 +331,7 @@ function initVueComponents(_V) {
                 if (this.settings.display_results_after_survey) {
                   // display result for survey
                   this.disablePrev = true
+                  console.log("displayFinished 3")
                   displayFinished(this)
                 } else {
                   // move to next survey
@@ -327,6 +341,7 @@ function initVueComponents(_V) {
               }
             }
           } else {
+            console.log("displayFinished 4")
             displayFinished(this)
           }
         }
