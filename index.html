@@ -9,7 +9,10 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.14/vue.min.js" integrity="sha512-BAMfk70VjqBkBIyo9UTRLl3TBJ3M0c6uyy2VMUrq370bWs7kchLNN9j1WiJQus9JAJVqcriIUX859JOm12LWtw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-  
+
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css' integrity='sha512-EZLkOqwILORob+p0BXZc+Vm3RgJBOe1Iq/0fiI7r/wJgzOFZMlsqTa29UEl6v6U6gsV4uIpsNZoV32YZqrCRCQ==' crossorigin='anonymous'/>
+  <link rel="stylesheet" href="./css/index.css">
+
   <script>
     // Your web app's Firebase configuration
     const firebaseConfig = {
@@ -25,41 +28,31 @@
     const firebaseApp = firebase.initializeApp(firebaseConfig);
 
     const db = firebase.firestore(firebaseApp);
-    
-    db.collection('sessions').get('miguelalfonsoquiambao@gmail.com').then((snap) => {
-      console.log(snap)
-    })
   </script>
 
   <script src="./js/preload.js"></script>
 </head>
 <body>
-  <div id="app">
+  <div id="app" class="container">
     <vc-form id="main-form" ref="main-form"></vc-form>
   </div>
 
 
   <!-- Vue Components-->
   <script type="text/x-template" id="vc-form">
-    <form :action="action" :method="method" :data-qid="qid" :data-sid="sid" :data-session="session">
-      <vc-text v-if="page == 'vc-text'" ref="text">
-        <p>Self-E[FIX]acy is the ultimate guide to your student problems! Focused on improving
-          students&#39; academic performance, this handout is filled with essential, up-to-date
-          information on the importance of self-efficacy and different study habits that helps aid
-          young learners in their scholastic journey. Using data from the research study of its creators,
-          Self-E[FIX]acy aims to shed light on better, more efficient ways to become an outstanding
-          student - all of the useful information, found in the convenience of one interactive website.
-          Familiarize yourself with the curated list of study habits guaranteed to lead to success; take
-          tests and do fun activities to learn about your own self-efficacy and unique learning style;
-          and get personalized tips and tricks to improve your skills and study like a pro. By the end,
-          you’ll be on track to improving your academic performance in no time. With our help, you’ll
-          be ready to [FIX] your self-efficacy!</p>
+    <form class="row" @submit="nextPage" :action="action" :method="method" :data-qid="qid" :data-sid="sid" :data-session="sessID">
+      <vc-text v-show="page == 'vc-text'" ref="text" class="twelve columns">
       </vc-text>
-      <vc-card v-if="page == 'vc-card'" ref="card"></vc-card>
+      <vc-card v-show="page == 'vc-card'" ref="card" class="twelve columns">
+      </vc-card>
 
-      <div class="controls">
+      <div v-show="session.finished" class="message twelve columns">
+        finished!
+      </div>
+
+      <div class="controls twelve columns">
         <button type="button" @click="previousPage" :disabled="disablePrev">Previous</button>
-        <button type="button" @click="nextPage" :disabled="disableNext">Next</button>
+        <button class="button-primary" type="submit" @click="nextPage" :disabled="disableNext">Next</button>
       </div>
     </form>
   </script>
@@ -70,31 +63,55 @@
   
   <script type="text/x-template" id="vc-card">
     <div class="card">
-      <div class="card-image"></div>
-      <div class="card-title" v-if="title">{{title}}</div>
+      <h3 class="card-title" v-if="title" v-html="title">{{title}}</h3>
+      <strong class="card-subtitle" v-if="subtitle" v-html="subtitle">{{subtitle}}</strong>
       <div class="card-body">
-        <div class="card-content" v-if="question">{{question}}</div>
-        <ul v-if="answers">
-          <li v-for="(answer, index) in answers">
-            <input type="radio" name="answer" value="{{answer.answer}}" id="answer-{{index}}" required/>
-            <label for="answer-{{index}}" v-if="answer.label">{{answer.label}}</label>
-          </li>
-        </ul>
+        <div class="card-content" v-if="question" v-html="question">{{question}}</div>
+        <label v-if="answers" v-for="(answer, index) in answers" :class="{horizontalDisplay: 'horizontal'}">
+            <input type="radio" name="answer" :value="index" :id="'answer-' + index" :selected="index == ans" v-model="qAns" required/>
+            <span class="label-body" v-if="answer">{{answer}}</span>
+        </label>
       </div>
     </div>
   </script>
 
   <script type="text/x-template" id="vc-text">
-    <div class="text">
-      <div class="title" v-if="title">{{title}}</div>
-      <div class="subtitle" v-if="subtitle">{{subtitle}}</div>
-      <div class="content">
-        <slot></slot>
-        {{content}}
+    <div class="texts container" v-if="texts">
+      <div class="text row" v-for="(text, index) in texts">
+        <h3 class="title twelve columns" v-if="text.title">{{text.title}}</h3>
+        <strong class="subtitle twelve columns" v-if="text.subtitle">{{subtitle}}</strong>
+        <div class="content twelve columns" v-html="text.content">
+          {{content}}
+        </div>
+        <div class="additional-info twelve columns" v-if="text.additionalInfo">
+          <dl>
+            <li v-for="(addInfo, index) in text.additionalInfo">
+              <b>{{addInfo.title}}</b>
+              <p v-html="addInfo.text">{{addInfo.text}}</p>
+            </li>
+          </dl>
+        </div>
       </div>
-      <div class="input" v-if="ifInput">
-        <label for="email">Email Address:</label>
-        <input type="email" placeholder="Email Address..." requried/>
+    </div>
+    <div class="texts container" v-else>
+      <div class="text row">
+        <h3 class="title twelve columns" v-if="title">{{title}}</h3>
+        <strong class="subtitle twelve columns" v-if="subtitle">{{subtitle}}</strong>
+        <div class="content twelve columns" v-html="content">
+          {{content}}
+        </div>
+        <div class="additional-info twelve columns" v-if="additionalInfo">
+          <dl>
+            <li v-for="(addInfo, index) in additionalInfo">
+              <b>{{addInfo.title}}</b>
+              <p v-html="addInfo.text">{{addInfo.text}}</p>
+            </li>
+          </dl>
+        </div>
+        <div class="input twelve columns" v-if="ifInput">
+          <label for="email">Email Address:</label>
+          <input class="u-full-width" type="email" v-model="email" placeholder="Email Address..." requried/>
+        </div>
       </div>
     </div>
   </script>

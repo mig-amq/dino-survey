@@ -1,0 +1,77 @@
+{
+  "sid": "self-efficacy-test",
+  "title": "",
+  "subtitle": "",
+  "calculation": "range",
+  "results": [
+    {
+      "title": "",
+      "range": [10, 20],
+      "subtitle": "",
+      "text": "Hi there!\r\n\r\nWe know that it can be challenging to believe in yourself when things seem difficult and\r\noverwhelming. But we want you to know that you have the ability to overcome any obstacle\r\nthat comes your way. Don&#39;t be afraid to try new things, take risks, and make mistakes\u2013these\r\nare all opportunities for growth and learning. Remember that every small step you take\r\ntowards your goals is a victory, and each victory will build your confidence and self-efficacy.\r\nBelieve in yourself, stay positive, and never give up on your dreams. You are capable of\r\ngreat things!\r\nHere are 5 strategies you can do to improve your self-efficacy:",
+      "additionalInfo": [{
+        "title": "Set small achievable goals.",
+        "text": "Starting with smaller goals can help you build confidence and motivation to tackle more significant challenges. Set specific and measurable goals, and celebrate your achievements along the way."
+      }, {
+        "title": "Identify and challenge negative self-talk.",
+        "text": "Negative self-talk can be a significant contributor to low self-efficacy. Pay attention to your internal dialogue and challenge negative thoughts with more positive, constructive ones."
+      }, {
+        "title": "Seek feedback and support.",
+        "text": "Positive feedback and support from others can help to reinforce your beliefs in yourself. Seek feedback from peers, teachers, and mentors, and to surround themselves with positive, encouraging people."
+      }, {
+        "title": "Practice self-care.",
+        "text": "Take care of your physical and emotional well-being and are better equipped to tackle challenges and build confidence. Prioritize self-care activities such as exercise, healthy eating, and sufficient sleep."
+      }, {
+        "title": "Try new things",
+        "text": "Try new activities and experiences, even if they feel outside of your comfort zone. This can help to build new skills and knowledge, as well as increase confidence and self-efficacy."
+      }]
+    },
+    {
+      "title": "",
+      "range": [21, 39],
+      "subtitle": "",
+      "text": "Hi there!\r\nYou may feel like you are just an average student with average abilities, but we want you to\r\nknow that you have the potential to achieve great things. Believe in yourself and your\r\nabilities, and set yourself challenging goals. Take inspiration from those around you who\r\nhave achieved success, and learn from their experiences. Celebrate your accomplishments,\r\nno matter how small, and don&#39;t be afraid to take risks and learn from your failures. With\r\nhard work, perseverance, and a strong belief in yourself, you can achieve anything you set\r\nyour mind to.\r\nHere are 6 strategies you can do to improve your self-efficacy:",
+      "additionalInfo": [{
+        "title": "Set challenging goals.",
+        "text": "Set yourself challenging but realistic goals that will push you outside of your comfort zone. Achieving these goals will help to build your confidence and self-efficacy."
+      }, {
+        "title": "Seek out positive role models",
+        "text": "Surround yourself with positive role models who inspire and motivate you. Look for people who have achieved success in areas that you are interested in, and learn from their experiences."
+      }, {
+        "title": "Practice self-reflection.",
+        "text": "Reflect on your past successes and challenges, and identify the skills and strategies that helped you to succeed. Use this knowledge to build your confidence and identify areas where you may need to improve."
+      }, {
+        "title": "Celebrate your achievements.",
+        "text": "Take the time to celebrate your accomplishments, no matter how small they may seem. This will help to reinforce your belief in yourself and your abilities."
+      }, {
+        "title": "Learn from failure.",
+        "text": "Don&#39;t be afraid to fail - it is a natural part of the learning process. Instead, use failure as an opportunity to learn and grow. Identify what went wrong, and use this knowledge to improve your approach next time."
+      }, {
+        "title": "Take care of yourself.",
+        "text": "Take care of your physical and emotional well-being and are better equipped to tackle challenges and build confidence. Prioritize self-care activities such as exercise, healthy eating, and sufficient sleep."
+      }]  
+    },
+    {
+      "title": "",
+      "range": [40, 50],
+      "subtitle": "",
+      "text": "Hi there!\r\nYour high self-efficacy is a testament to your hard work and dedication. Keep believing in\r\nyourself and your abilities, and continue to set yourself new challenges and goals. Focus on\r\nyour strengths, seek out positive feedback, and stay engaged and active in your learning and\r\nactivities. Remember to share your knowledge and expertise with others, and help them to\r\nbuild their own self-efficacy. With your determination and confidence, there is no limit to\r\nwhat you can achieve. Keep up the great work!\r\nHere are 5 strategies to maintain your self-efficacy:",
+      "additionalInfo": [{
+        "title": "Set yourself new challenges.",
+        "text": "Continue to set yourself new challenges and goals, even if you have already achieved a lot. This will keep you motivated and engaged, and help you to continue building your confidence and self-efficacy."
+      },{
+        "title": "Focus on your strengths.",
+        "text": "Take the time to identify and focus on your strengths. By doing so, you will be able to build on your existing skills and abilities, and continue to excel in areas where you already have high self-efficacy."
+      }, {
+        "title": "Seek out positive feedback.",
+        "text": "Seek out positive feedback from teachers, mentors, and peers. This will help you to reinforce your belief in yourself and your abilities, and identify areas where you may need to improve."
+      }, {
+        "title": "Stay engaged and active.",
+        "text": "Stay engaged and active in your learning and extracurricular activities. This will help you to continue building your skills and knowledge, and maintain your motivation and confidence."
+      }, {
+        "title": "Help others.",
+        "text": "Share your knowledge and expertise with others, and help them to build their own self-efficacy. This will not only benefit them, but also reinforce your own belief in yourself and your abilities."
+      }]
+    }
+  ]   
+}

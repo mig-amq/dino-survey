@@ -1,0 +1,65 @@
+{
+  "sid": "learning-style-test",
+  "title": "",
+  "subtitle": "",
+  "calculation": "majority",
+  "results": [
+    {
+      "title": "Visual Learner",
+      "range": [0, 0],
+      "subtitle": "",
+      "text": "If you answered mostly A&#39;s, you may be a visual learner. Pictures, diagrams, and visual\r\nrepresentations work best for you in terms of absorbing information. You may be more\r\ninterested in learning concepts that involve illustrations and graphs, and can easily see the\r\nbig picture. Compared to other people, your spatial awareness is impressively greater!\r\nThese people learn best when seemingly abstract lessons are made concrete via visual\r\nrelationships, such as when a teacher uses a flowchart to illustrate a sequence of events. For\r\nthem, they are able to easily organize information and review them. In short, they do best\r\nwhen they have a visual \u201Cstudy guide\u201D, or a visual summary, of the lesson.\r\nHere are some study tips and habits that can help you as a visual learner:",
+      "additionalInfo": [{
+        "title": "Take notes.",
+        "text": "Writing down what you see when learning can help in retaining the\r\ninformation as your eyes continue to process the lesson repeatedly; this will help in studying\r\nfor a test or exam in the future. It also helps that you will be able to go back to your notes at\r\nany time as you review for a test."
+      }, {
+        "title": "Organize your thoughts into visual aids.",
+        "text": "If the lesson seems too difficult to understand,\r\ntry to reorganize the main points and details by creating a visual aid such as a table, chart or\r\ngraph."
+      }, {
+        "title": "Reread class materials.",
+        "text": "Sometimes, a teacher or lecturer can move too fast through topics.\r\nTry to reread on your own the lessons from your textbook or the teacher&#39;s slides to be able\r\nto take the information at your own pace."
+      }, {
+        "title": "Color code.",
+        "text": "Some visual learners are able to distinguish and identify information through\r\nother visual categories, such as color. This is why highlighting notes with different colored\r\nmarkers (ex: highlighting a lesson with green, then highlighting the next lesson with pink)\r\ncan make the information easier to digest."
+      }]
+    },
+    {
+      "title": "Auditory Learner",
+      "range": [1, 1],
+      "subtitle": "",
+      "text": "If you answered mostly B&#39;s, you may be an auditory learner. Sounds, videos, and audio\r\nrecordings work best for you in terms of absorbing information. You may find it easier to\r\nlearn concepts when listening to verbal lectures and lessons, and can understand better\r\nwhen hearing instructions rather than reading them. Compared to other people, your\r\ncommunication skills may be a lot stronger!\r\nAuditory learners also like to engage in verbal discussions with others. They process lessons\r\nthrough literally talking them out, whether that be through question and answer or\r\npresentations. They are able to better memorize information this way.\r\nHere are some study tips and habits that can help you as an auditory learner:",
+      "additionalInfo": [{
+        "title": "Studying with a friend or classmate.",
+        "text": "Reviewing for an exam alone can seem a difficult task,\r\nbut by studying with another person and exchanging ideas and thoughts with each other,\r\nthe communication you share can help you retain the details of the lesson easier as you\r\nhear it."
+      }, {
+        "title": "Read aloud",
+        "text": "If you can&#39;t find anyone to study with, you can simply read your notes aloud to\r\nhear them spoken! Listening to a voice relay the information, even if it&#39;s your own, can help\r\nyou in deciphering what you&#39;re trying to review - and it helps you gain an understanding of\r\nthe topic through your own words."
+      }, {
+        "title": "Record your lectures through audio or video",
+        "text": "Have a record of the teacher or lecturer&#39;s\r\npresentation itself so you don&#39;t miss any details. You can easily come back to certain parts of\r\nthe lesson if you were unable to hear it properly the first time."
+      }, {
+        "title": "Listen to Instrumental music while studying",
+        "text": "When all else fails, stimulating your ears\r\nwhile reading notes can still benefit auditory learners in reviewing lessons - music on the\r\nradio with lyrics can be distracting to the study experience, so putting on some instrumental\r\ntunes can help your mind focus on the task at hand."
+      }]
+    },
+    {
+      "title": "Kinesthetic Learner",
+      "range": [2, 2],
+      "subtitle": "",
+      "text": "If you answered mostly C&#39;s, you may be a kinesthetic learner. Practical demonstrations,\r\nexperiments, and hands-on activities work best for you in terms of absorbing information.\r\nYou may find it easier to learn concepts when performing actions yourself, and prefer\r\nfreedom in experiencing rather than being fed lessons. Compared to other people, your\r\nability to pick up new skills is notably better!\r\nKinesthetic learners retain information better when they act it out; some may even choose\r\nto do a mix of auditory and kinesthetic learning to make for a truly immersive, interactive\r\nlesson that encourages the students to express themselves.\r\nHere are some study tips and habits that can help you as a kinesthetic learner:",
+      "additionalInfo": [{
+        "title": "Make physical demonstrations \/ games out of studying.",
+        "text": "If reading or listening to a lecture\r\nis too boring, try to absorb the lesson through a way that engages your body\u2013act out certain\r\nevents to remember or turn it into a game or even a dance."
+      }, {
+        "title": "Move your body",
+        "text": "If you can&#39;t sit still while studying, then try to move around while still\r\nabsorbing the lesson through visual or auditory methods\u2013pacing around the room, or\r\nplaying with a stress ball may help you in focusing on learning the information."
+      }, {
+        "title": "Take notes.",
+        "text": "Taking notes might seem like a waste of time if you can easily record a video of\r\na lecture, but the physical movement of your hand writing the words or even typing on a\r\nlaptop can engage you to become more aware of what you&#39;re learning, and help you study\r\nbetter."
+      }, {
+        "title": "Take frequent brakes.",
+        "text": "The longer you sit down to study, the more easily the information\r\nmay slip away from your memory; try to take breaks to do physical activity such as exercise\r\nor workout, to recharge your body and be able to get back into studying your lessons again."
+      }]
+    }
+  ]   
+}

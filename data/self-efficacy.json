@@ -1,0 +1,83 @@
+{
+  "sid": "self-efficacy-test",
+  "name": "Self-efficacy Test",
+  "active": true,
+  "instructions": "For each statement, indicate the degree to which you agree or disagree by choosing a number on the scale from 1 to 5.",
+  "loadOrder": "1",
+  "horizontalDisplay": false,
+  "answers": ["Strongly disagree", "Somewhat disagree", "Neither agree nor disagree", "Somewhat agree", "Strongly disagree"],
+  "hasSameChoices": true,
+  "numericalChoices": true,
+  "questions": [
+    {
+      "qid": "self-efficacy-1",
+      "q": "I am confident in my ability to achieve my goals.", 
+      "horizontalDisplay": false,
+      "a": null, 
+      "as": null
+    },
+    {
+      "qid": "self-efficacy-2",
+      "q": "I believe that I can handle difficult tasks.", 
+      "horizontalDisplay": false,
+      "a": null, 
+      "as": null
+    },
+    {
+      "qid": "self-efficacy-3",
+      "q": "I am able to stay focused and productive when faced with distractions.", 
+      "horizontalDisplay": false,
+      "a": null, 
+      "as": null
+    },
+    {
+      "qid": "self-efficacy-4",
+      "q": "I am capable of finding solutions to problems that I encounter.", 
+      "horizontalDisplay": false,
+      "a": null, 
+      "as": null
+    },
+    {
+      "qid": "self-efficacy-5",
+      "q": "I am confident in my ability to learn new things.", 
+      "horizontalDisplay": false,
+      "a": null, 
+      "as": null
+    },
+    {
+      "qid": "self-efficacy-6",
+      "q": "I believe that I can overcome obstacles that stand in my way.", 
+      "horizontalDisplay": false,
+      "a": null, 
+      "as": null
+    },
+    {
+      "qid": "self-efficacy-7",
+      "q": "I am able to manage my time effectively to accomplish my goals.", 
+      "horizontalDisplay": false,
+      "a": null, 
+      "as": null
+    },
+    {
+      "qid": "self-efficacy-8",
+      "q": "I am confident in my ability to communicate effectively with others.", 
+      "horizontalDisplay": false,
+      "a": null, 
+      "as": null
+    },
+    {
+      "qid": "self-efficacy-9",
+      "q": "I am able to make decisions with confidence and clarity.", 
+      "horizontalDisplay": false,
+      "a": null, 
+      "as": null
+    },
+    {
+      "qid": "self-efficacy-10",
+      "q": "I believe that I can handle stressful situations with ease.", 
+      "horizontalDisplay": false,
+      "a": null, 
+      "as": null
+    }
+  ]
+}

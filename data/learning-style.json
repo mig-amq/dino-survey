@@ -1,0 +1,76 @@
+{
+  "sid": "learning-style-test",
+  "name": "Learning Style Test",
+  "active": true,
+  "instructions": "Take this learning style test to identify your preferred way of learning:",
+  "loadOrder": 0,
+  "horizontalDisplay": false,
+  "answers": null,
+  "hasSameChoices": false,
+  "numericalChoices": false,
+  "questions": [
+    {
+      "qid": "learning-style-test-1",
+      "q": "When I learn something new, I prefer to:",
+      "a": null,
+      "as": ["Read about it", "Listen to a lecture", "Watch a demonstration"],
+      "horizontalDisplay": false
+    },
+    {
+      "qid": "learning-style-test-2",
+      "q": "When I study for an exam, I typically:",
+      "a": null,
+      "as": ["Make flashcards", "Take practice quizzes", "Review notes"],
+      "horizontalDisplay": false
+    },
+    {
+      "qid": "learning-style-test-13",
+      "q": "When I am trying to understand a complex concept, I find it helpful to:",
+      "a": null,
+      "as": ["Draw a diagram or visualize it in my head", "Talk through it with someone else", "Write out my thoughts and ideas"],
+      "horizontalDisplay": false
+    },
+    {
+      "qid": "learning-style-test-4",
+      "q": "In a group project, I tend to:",
+      "a": null,
+      "as": ["Take on research and writing tasks", "Present information to the group", "Brainstorm ideas and create an outline"],
+      "horizontalDisplay": false
+    },
+    {
+      "qid": "learning-style-test-5",
+      "q": "When you want to remember a list of items, do you prefer to:",
+      "a": null,
+      "as": ["Write them down", "Repeat them aloud", "Visualize them in your mind"],
+      "horizontalDisplay": false
+    },
+    {
+      "qid": "learning-style-test-6",
+      "q": "When you encounter a difficult problem, do you prefer to:",
+      "a": null,
+      "as": ["Work through it step by step", "Discuss it with someone else", "Try different approaches until you find a solution"],
+      "horizontalDisplay": false
+    },
+    {
+      "qid": "learning-style-test-7",
+      "q": "When you are learning a new skill, do you prefer to:",
+      "a": null,
+      "as": ["Watch a demonstration or video tutorial", "Practice the skill repeatedly until you feel confident", "Work with a partner or group to learn together"],
+      "horizontalDisplay": false
+    },
+    {
+      "qid": "learning-style-test-8",
+      "q": "When you have to memorize information for a test, do you prefer to:",
+      "a": null,
+      "as": ["Make flashcards or study notes", "Record yourself saying the information out loud", "Use mnemonics or mental images to help remember the information"],
+      "horizontalDisplay": false
+    },
+    {
+      "qid": "learning-style-test-9",
+      "q": "When you are studying for a subject you don&#39;t find interesting, do you prefer to:",
+      "a": null,
+      "as": ["Read the material and highlight important points", "Listen to lectures or podcasts about the topic", "Find ways to relate the subject to something you are interested in"],
+      "horizontalDisplay": false
+    }
+  ]
+}

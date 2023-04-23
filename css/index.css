@@ -1,0 +1,24 @@
+#app {
+  margin-top: 15px;
+}
+
+button:disabled {
+  background-color: #e2e2e2;
+  cursor: default;
+}
+
+.message, .controls {
+  margin: 15px 0;
+}
+
+.text .input {
+  margin-top: 25px;
+}
+
+.text .title {
+  border-bottom: 1px solid #e2e2e2;
+}
+
+.card .card-body {
+  margin-top: 15px;
+}
