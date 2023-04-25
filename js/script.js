@@ -241,7 +241,7 @@ function initVueComponents(_V) {
         subtitle: "",
         content: "",
         ifInput: null,
-        email: 'asd@asd.com',
+        email: '',
         additionalInfo: "",
         texts: null
       }
@@ -269,7 +269,8 @@ function initVueComponents(_V) {
       this.$refs.text.ifInput=true
       this.$refs.text.title="Welcome!"
       this.survey_keys = []
-      
+      toggleLoading()
+
       // load from surveys from db
       db.collection('surveys').get().then(function (snap) {
         this.session.answers = {}
@@ -297,6 +298,7 @@ function initVueComponents(_V) {
         this.session.next_survey = null
 
         this.session.finished = false
+
       }.bind(this))
 
       db.collection('survey-results').get().then(function (snap) {
@@ -309,6 +311,7 @@ function initVueComponents(_V) {
         this.settings = snap.data()
 
         this.$refs.text.content = this.settings.intro
+        toggleLoading()
       }.bind(this))
     },
     methods: {
@@ -367,144 +370,158 @@ function initVueComponents(_V) {
       },
 
       nextPage(event) {
-        if (!this.disableNext) {
-          if (!this.session.finished) {
-            if (this.session.next_page == DISPLAY_INTRO) {
-              // display intro for survey
-              // check if came from landing page
-              if (this.session.current_page == null) {
-                this.session.current_survey = this.session.surveys[0]
+        if (this.$refs.text.email && !this.disableNext){
+          this.$refs.text.email = this.$refs.text.email.trim()
+          if (this.$refs.text.email.length > 0) {
+            this.message = null
+            if (!this.session.finished) {
+              if (this.session.next_page == DISPLAY_INTRO) {
+                // display intro for survey
+                // check if came from landing page
+                if (this.session.current_page == null) {
+                  this.session.current_survey = this.session.surveys[0]
 
-                if (this.session.surveys.length > 1)
-                  this.session.next_survey = this.session.surveys[1]
+                  if (this.session.surveys.length > 1)
+                    this.session.next_survey = this.session.surveys[1]
 
-                  this.disablePrev = true
-              } else {
+                    this.disablePrev = true
+                } else {
+                  if (this.session.current_page == DISPLAY_QUESTION) {
+                    this.fromPrevious = false
+                    answerQuestion(this)
+                  } else if (this.session.current_page == DISPLAY_RESULT) {
+                    this.session.current_survey = this.session.next_survey
+
+                    // move to next survey
+                    this.session.current_survey = this.session.next_survey
+                    let curr_survey_index = this.session.surveys.indexOf(this.session.current_survey)
+
+                    if (curr_survey_index != -1 && curr_survey_index + 1 < this.session.surveys.length) {
+                      this.session.next_survey = this.session.surveys[curr_survey_index]
+                    } else {
+                      this.session.next_survey = null
+                    }
+
+                    if (curr_survey_index > 0)
+                      this.disablePrev = false
+                    else
+                      this.disablePrev = true
+                  }
+                }
+
+                this.session.current_page = DISPLAY_INTRO
+                this.session.next_page = DISPLAY_QUESTION
+                saveSession(this, db).then(function (snap0) {
+                  displayPage(this)
+                }.bind(this))
+              } else if (this.session.next_page == DISPLAY_QUESTION) {
+                // check if came from intro page
+                if (this.session.current_page == DISPLAY_INTRO || this.session.current_page == DISPLAY_RESULT) {
+                  // display initial question only
+                  this.session.current_page = DISPLAY_QUESTION
+                  this.session.current_question = 0
+                  this.session.next_question = 1
+
+                  saveSession(this, db).then(function (snap0) {
+                    this.disablePrev = false
+                    displayQuestion(this)
+                  }.bind(this));
+                } else if (this.session.current_page == DISPLAY_QUESTION) {
+                  // came from previous question
+                  // todo answer previous question
+                  this.fromPrevious = false
+                  answerQuestion(this)
+
+                  this.session.current_question = this.session.next_question
+                  this.session.next_question = this.session.current_question + 1
+                  if (this.session.next_question >= this.surveys[this.session.current_survey].questions.length) {
+                    if(this.settings.display_results_after_survey) {
+                      this.session.next_page = DISPLAY_RESULT
+                    } else {
+                      this.session.next_page = DISPLAY_INTRO
+                    }
+                  }
+                  
+                  saveSession(this, db).then(function (snap0) {
+                    this.disablePrev = false
+                    displayQuestion(this)
+                  }.bind(this));
+                }
+              } else if (this.session.next_page == DISPLAY_RESULT) {
                 if (this.session.current_page == DISPLAY_QUESTION) {
                   this.fromPrevious = false
                   answerQuestion(this)
-                } else if (this.session.current_page == DISPLAY_RESULT) {
-                  this.session.current_survey = this.session.next_survey
 
-                  // move to next survey
-                  this.session.current_survey = this.session.next_survey
-                  let curr_survey_index = this.session.surveys.indexOf(this.session.current_survey)
+                  // check if came from final question
+                  if (this.session.next_question >= this.surveys[this.session.current_survey].questions.length) {
+                    // check if in final survey
+                    if (this.session.next_survey == null) {
+                      this.session.finished = true
+                      this.session.next_page = null
+                      this.session.next_question = null
 
-                  if (curr_survey_index != -1 && curr_survey_index + 1 < this.session.surveys.length) {
-                    this.session.next_survey = this.session.surveys[curr_survey_index]
-                  } else {
-                    this.session.next_survey = null
-                  }
-
-                  if (curr_survey_index > 0)
-                    this.disablePrev = false
-                  else
-                    this.disablePrev = true
-                }
-              }
-
-              this.session.current_page = DISPLAY_INTRO
-              this.session.next_page = DISPLAY_QUESTION
-              saveSession(this, db).then(function (snap0) {
-                displayPage(this)
-              }.bind(this))
-            } else if (this.session.next_page == DISPLAY_QUESTION) {
-              // check if came from intro page
-              if (this.session.current_page == DISPLAY_INTRO || this.session.current_page == DISPLAY_RESULT) {
-                // display initial question only
-                this.session.current_page = DISPLAY_QUESTION
-                this.session.current_question = 0
-                this.session.next_question = 1
-
-                saveSession(this, db).then(function (snap0) {
-                  this.disablePrev = false
-                  displayQuestion(this)
-                }.bind(this));
-              } else if (this.session.current_page == DISPLAY_QUESTION) {
-                // came from previous question
-                // todo answer previous question
-                this.fromPrevious = false
-                answerQuestion(this)
-
-                this.session.current_question = this.session.next_question
-                this.session.next_question = this.session.current_question + 1
-                if (this.session.next_question >= this.surveys[this.session.current_survey].questions.length) {
-                  if(this.settings.display_results_after_survey) {
-                    this.session.next_page = DISPLAY_RESULT
+                      this.disableNext = true
+                    } else {
+                      this.session.next_page = DISPLAY_INTRO
+                    }
                   } else {
                     this.session.next_page = DISPLAY_INTRO
                   }
                 }
                 
+                this.session.current_page = DISPLAY_RESULT
                 saveSession(this, db).then(function (snap0) {
-                  this.disablePrev = false
-                  displayQuestion(this)
+                  this.disablePrev = true
+                  displayResults(this)
                 }.bind(this));
-              }
-            } else if (this.session.next_page == DISPLAY_RESULT) {
-              if (this.session.current_page == DISPLAY_QUESTION) {
-                this.fromPrevious = false
-                answerQuestion(this)
+              } else {
+                // current_page is null means landing page was displayed
+                db.collection('sessions').doc(this.$refs.text.email).get().then((function (snap) {
+                  if (snap.exists) {
+                    this.session = shallowCopy(snap.data())
 
-                // check if came from final question
-                if (this.session.next_question >= this.surveys[this.session.current_survey].questions.length) {
-                  // check if in final survey
-                  if (this.session.next_survey == null) {
-                    this.session.finished = true
-                    this.session.next_page = null
-                    this.session.next_question = null
-
-                    this.disableNext = true
-                  } else {
-                    this.session.next_page = DISPLAY_INTRO
-                  }
-                } else {
-                  this.session.next_page = DISPLAY_INTRO
-                }
-              }
-              
-              this.session.current_page = DISPLAY_RESULT
-              saveSession(this, db).then(function (snap0) {
-                this.disablePrev = true
-                displayResults(this)
-              }.bind(this));
-            } else {
-              // current_page is null means landing page was displayed
-              db.collection('sessions').doc(this.$refs.text.email).get().then((function (snap) {
-                if (snap.exists) {
-                  this.session = shallowCopy(snap.data())
-
-                  if (this.session.finished) {
-                    this.disableNext = true
-                    this.disablePrev = true
-                    displayResults(this)
-                  } else if (this.session.current_page == DISPLAY_QUESTION){
-                    this.disableNext = false
-                    this.disablePrev = false
-                    displayQuestion(this)
-                  } else if (this.session.current_page == DISPLAY_INTRO) {
-                    if (Object.keys(this.session.surveys)[0] == this.session.current_survey) {
+                    if (this.session.finished) {
+                      this.disableNext = true
                       this.disablePrev = true
-                    } else {
+                      displayResults(this)
+                    } else if (this.session.current_page == DISPLAY_QUESTION){
+                      this.disableNext = false
                       this.disablePrev = false
+                      displayQuestion(this)
+                    } else if (this.session.current_page == DISPLAY_INTRO) {
+                      if (Object.keys(this.session.surveys)[0] == this.session.current_survey) {
+                        this.disablePrev = true
+                      } else {
+                        this.disablePrev = false
+                      }
+                      
+                      displayPage(this)
+                    } else if (this.session.current_page == DISPLAY_RESULT) {
+                      displayResults(this)
                     }
-                    
-                    displayPage(this)
-                  } else if (this.session.current_page == DISPLAY_RESULT) {
-                    displayResults(this)
+                  } else {
+                    db.collection('sessions').doc(this.$refs.text.email).set(this.session).then((function (snap0) {
+                      this.session.current_page = null
+                      this.session.next_page = DISPLAY_INTRO
+                      
+                      this.nextPage(this)
+                    }).bind(this))
                   }
-                } else {
-                  db.collection('sessions').doc(this.$refs.text.email).set(this.session).then((function (snap0) {
-                    this.session.current_page = null
-                    this.session.next_page = DISPLAY_INTRO
-                    
-                    this.nextPage(this)
-                  }).bind(this))
-                }
-              }).bind(this))
+                }).bind(this))
+              }
+            } else {
+              displayResults(this)
             }
           } else {
-            displayResults(this)
+            this.message = {
+              type: 'error',
+              text: 'Email address is required.'
+            }
+          }
+        } else {
+          this.message = {
+            type: 'error',
+            text: 'Email address is required.'
           }
         }
       },

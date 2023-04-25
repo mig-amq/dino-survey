@@ -11,12 +11,16 @@ button:disabled {
   cursor: default;
 }
 
-.message, .controls {
+.controls {
   margin: 15px 0;
 }
 
 .text .input {
   margin-top: 25px;
+}
+
+.text .content {
+  text-align: justify;
 }
 
 .text .title {
@@ -194,13 +198,44 @@ p + h3 {
   border-bottom: 1px solid #e8e8e8;
 }
 
+p {
+  text-align: justify;
+}
+
+.result-additional {
+  display: flex;
+  vertical-align: middle;
+  align-items: top;
+  text-align: justify;
+}
+
+.result-additional .result-image {
+  max-width: 300px;
+  min-width: 300px;
+  padding: 0 20px;
+}
+
+.additional-info ul {
+  list-style-type: none;
+}
+
+.message {
+  padding: 10px;
+  color: #fff;
+}
+
+.message.error {
+  background-color: #c33b3b;
+}
+
+.controls > a {
+  float: right;
+}
+
 /* iPads (landscape) ----------- */
 @media only screen
 and (max-width : 769px)
 and (max-width : 1024px) {
-  p {
-    text-align: justify;
-  }
   .left-image img {
     display: block;
     margin: 15px 0;
@@ -213,5 +248,28 @@ and (max-width : 1024px) {
   
   .list .details > h5 {
     text-align: center;
+  }
+
+  .result-additional {
+    flex-direction: column;
+  }
+
+  .result-additional .result-image {
+    padding: 15px 0;
+  }
+
+  .list .image {
+    padding: 15px 0;
+  }
+
+  .result-additional strong {
+    text-align: center;
+    display: block;
+  }
+
+  .controls > a {
+    text-align: center;
+    display: block;
+    float: none;
   }
 }

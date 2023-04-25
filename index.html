@@ -45,10 +45,6 @@
   <!-- Vue Components-->
   <script type="text/x-template" id="vc-form">
     <form class="row" @submit.prevent="nextPage">
-      <div v-show="shownPage == 'intro'">
-        Intro
-      </div>
-      
       <vc-text v-show="shownPage == 'text'" ref="text" class="twelve columns">
       </vc-text>
 
@@ -326,16 +322,44 @@
         </div>
       </div>
 
+      <div v-show="shownPage == 'self-efficacy-test'" class="intro">
+        <h3 class="title">What is Self-Efficacy?</h3>
+
+        <div style="margin: 20px 0">
+          <img src="./img/self-efficacy.png" alt="Self-Efficacy" width="100%" height="auto">
+        </div>
+        
+        <p>
+          Self-efficacy refers to an individual's belief in their ability to accomplish a specific task or achieve a goal. Self-efficacy also plays a part in influencing a person's decision-making, how they respond to hindrances, and their ways of thinking (Bandura, 1997). In this case, it is a key component of motivation and can influence how a student approaches their academic work. Students with high self-efficacy exhibit confidence in their capabilities, such as believing that they can solve a challenging math problem, or feeling confident in their ability to write a compelling essay.
+        </p>
+
+        <h3 class="title">Importance/Relevance of Self-Efficacy</h3>
+        <p>
+          Self-efficacy is important because it can impact a student's academic performance and overall well-being. When students have a strong sense of self-efficacy, they are more likely to set ambitious goals, persist through challenges, and bounce back from failures. However, those with low self-efficacy tend to procrastinate, avoid challenges, have less confidence, and struggle moving past setbacks and their lack of achievement.
+        </p>
+        <p>
+         </p>
+
+        <p class="left-image">
+          <img src="./img/survey.webp" alt="Study" srcset="" height="auto" width="100%"> 
+          That being the case, it is important to strengthen one's self-efficacy. Practicing self-efficacy can be achieved by setting achievable goals, celebrating successes, and seeking out positive feedback.
+          <br/>
+          <br/>
+          A study conducted by Alay Ahmad and Triantoro Safaria (2013) shows that those who have high self-efficacy would be more willing to take on more difficult challenges (such as taking more complex courses) and by John Lane and Andrew M. Lane (2001), it was found that self-efficacy was indeed correlated to academic performance. In fact, self-efficacy served as a predictor for success as claimed in other studies. In an article "Believe to Succeed: 9 ways to boost your Self-Efficacy" (2021), those who do not think they have to make significant differences, tend to react passively when they are given challenges or when they find themselves in a situation they have not experienced. This leads them to avoiding new experiences because they already have the thinking they would not be able to succeed.
+        </p>
+      </div>
+
       <div v-show="shownPage == 'self-efficacy-test'">
       </div>
 
-      <div v-show="session.finished" class="message twelve columns">
-        finished!
+      <div v-if="message" :class="'message twelve columns ' + message.type" v-html="message.text">
+        {{message.text}}
       </div>
 
       <div class="controls twelve columns">
-        <button type="button" @click="previousPage" :disabled="disablePrev">Previous</button>
-        <button class="button-primary" type="submit" @click.prevent="nextPage" :disabled="disableNext">Next</button>
+        <button type="button" @click="previousPage" :disabled="disablePrev" v-if="!session.finished">Previous</button>
+        <button :class="disableNext ? 'button' : 'button-primary'" type="submit" @click.prevent="nextPage" :disabled="disableNext"  v-if="!session.finished">Next</button>
+        <a class="button-primary" href="?reload=true" v-if="session.finished">Return to Main Screen</a>
       </div>
     </form>
   </script>
@@ -360,19 +384,26 @@
 
   <script type="text/x-template" id="vc-text">
     <div class="texts container" v-if="texts">
-      <div class="text row" v-for="(text, index) in texts">
+      <div class="text row" v-for="(text, index) in texts" style="margin-bottom: 25px;">
         <h3 class="title twelve columns" v-if="text.title">{{text.title}}</h3>
         <strong class="subtitle twelve columns" v-if="text.subtitle">{{subtitle}}</strong>
         <div class="content twelve columns" v-html="text.content">
           {{content}}
         </div>
-        <div class="additional-info twelve columns" v-if="text.additionalInfo">
-          <dl>
+        <div class="additional-info twelve columns" v-if="text.additionalInfo" style="margin-top: 25px;">
+          <ul>
             <li v-for="(addInfo, index) in text.additionalInfo">
-              <b>{{addInfo.title}}</b>
-              <p v-html="addInfo.text">{{addInfo.text}}</p>
+              <div class="result-additional">
+                <div class="result-image" v-if="addInfo.image">
+                  <img :src="'./img/' + addInfo.image" :alt="addInfo.title" width="100%" height="auto">
+                </div>
+                <div>
+                  <strong v-html="addInfo.title">{{addInfo.title}}</strong>
+                  <p v-html="addInfo.text">{{addInfo.text}}</p>
+                </div>
+              </div>
             </li>
-          </dl>
+          </ul>
         </div>
       </div>
     </div>
@@ -383,13 +414,20 @@
         <div class="content twelve columns" v-html="content">
           {{content}}
         </div>
-        <div class="additional-info twelve columns" v-if="additionalInfo">
-          <dl>
-            <li v-for="(addInfo, index) in additionalInfo">
-              <strong v-html="addInfo.title">{{addInfo.title}}</strong>
-              <p v-html="addInfo.text">{{addInfo.text}}</p>
+        <div class="additional-info twelve columns" v-if="additionalInfo" style="margin-top: 25px;">
+          <ul>
+            <li v-for="(addInfo, index) in additionalInfo" style="padding: 15px 0; display: block;">
+              <div class="result-additional">
+                <div class="result-image" v-if="addInfo.image">
+                  <img :src="'./img/' + addInfo.image" :alt="addInfo.title" width="100%" height="auto">
+                </div>
+                <div>
+                  <strong v-html="addInfo.title">{{addInfo.title}}</strong>
+                  <p v-html="addInfo.text">{{addInfo.text}}</p>
+                </div>
+              </div>
             </li>
-          </dl>
+          </ul>
         </div>
         <div class="input twelve columns" v-if="ifInput">
           <label for="email">Email Address:</label>
