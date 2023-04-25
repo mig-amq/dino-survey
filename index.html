@@ -6,7 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Survey Questionnaire</title>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js' integrity='sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==' crossorigin='anonymous'></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.14/vue.min.js" integrity="sha512-BAMfk70VjqBkBIyo9UTRLl3TBJ3M0c6uyy2VMUrq370bWs7kchLNN9j1WiJQus9JAJVqcriIUX859JOm12LWtw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.14/vue.min.js" integrity="sha512-BAMfk70VjqBkBIyo9UTRLl3TBJ3M0c6uyy2VMUrq370bWs7kchLNN9j1WiJQus9JAJVqcriIUX859JOm12LWtw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.14/vue.js" integrity="sha512-pzaIT4M4pWutHYv8yQrtkMtHBB17qXE6LnS7d9R6oiGQ+zApGM1T+ADe+J9borsHmdMGB3JHhfDsdkavD876nQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
@@ -33,6 +35,8 @@
   <script src="./js/preload.js"></script>
 </head>
 <body>
+  <div class="loading">Loading&#8230;</div>
+
   <div id="app" class="container">
     <vc-form id="main-form" ref="main-form"></vc-form>
   </div>
@@ -40,11 +44,290 @@
 
   <!-- Vue Components-->
   <script type="text/x-template" id="vc-form">
-    <form class="row" @submit="nextPage" :action="action" :method="method" :data-qid="qid" :data-sid="sid" :data-session="sessID">
-      <vc-text v-show="page == 'vc-text'" ref="text" class="twelve columns">
+    <form class="row" @submit.prevent="nextPage">
+      <div v-show="shownPage == 'intro'">
+        Intro
+      </div>
+      
+      <vc-text v-show="shownPage == 'text'" ref="text" class="twelve columns">
       </vc-text>
-      <vc-card v-show="page == 'vc-card'" ref="card" class="twelve columns">
+
+      <vc-card v-show="shownPage == 'card'" ref="card" class="twelve columns">
       </vc-card>
+      
+      <div v-show="shownPage == 'learning-style-test'" class="intro">
+        <h3 class="title">What are Study Habits?</h3>
+        <p>
+          Study habits refer to the behaviors, techniques, and strategies that students use to learn
+          and retain information. In addition to this, study habits can also be defined as a type of time
+          management, in which a person dedicates a certain period of time purely for learning.
+        </p>
+
+        <strong>Here are some examples of study habits:</strong>
+
+        <p>
+          The <strong>Pomodoro technique</strong>, a time-management method, suggests breaking down study
+          sessions into <i>25-minute intervals</i> with short breaks in between to improve focus and
+          productivity.
+        </p>
+        <p>
+          The technique is indeed one of the effective ways to combat procrastination. It helps
+          students to break down big tasks, projects, or even goals that could be done or finished for
+          the next 25 minutes. It can also help students to be hyper focused on the next, immediate
+          tasks that they must do rather than get overwhelmed by the overall enormity of tasks that
+          they are working on.
+        </p>
+
+        <div style="margin: 20px 0">
+          <img src="./img/pomodoro-steps.png" alt="Pomodoro Steps" width="100%" height="auto">
+        </div>
+
+        <p>
+          The pomodoro technique can help students also to combat distractions. It helps students to
+          resist all self-interruptions and can retrain the brain to focus on the task. It is said that one
+          pomodoro is set only for a specific task and each break is known as a chance to reset and
+          brings one attention back to what they are doing. Lastly, pomodoro technique helps
+          students to become more aware about their time. It will help students to have a clear
+          measurement of their finite time and efforts, allowing them to reflect and plan their days
+          more accurately and efficiently. Pomodoro technique also can gamify students' productivity.
+          Each pomodoro that is done gives an opportunity to improve things that were done last
+          time. Each pomodoro can provide the chance to reevaluate a student's goal, challenge self
+          to focus, and limit distractions. Indeed, developing good study habits via the pomodoro
+          technique can actually help students to develop time management skills. It allows the
+          students to manage their time effectively and do things systematically.
+        </p>
+
+        <p class="left-image">
+          <img src="./img/study.jpg" alt="Study Habits" srcset="" height="auto" width="100%">
+
+          That being said, study habits are more than just time management. As the term suggests,
+          one can hone their study habits by, well, developing certain habits–like reading habits.
+          There are several factors that contribute to developing reading habits, such as a person’s
+          motivation for reading, the environment in which they read, and the type of literature they
+          consume. One way to improve reading habits is by taking notes of what is being read to
+          better digest the information. You can create habits too with enough motivation; form
+          effective study habits by rewarding yourself (treat yourself to a favorite snack, watch a
+          movie, etc.) every time you succeed in your study goals. 
+          Good study habits can help improve academic performance, increase motivation, and
+          reduce stress levels. Having good study habits could improve one’s grade drastically, since
+          having a solid study plan makes for less room for errors; thus, it improves one’s academic
+          performance. Good study habits can also improve the knowledge base of individuals.
+          Instead of skimming through on a certain material, one is required to dig deeper into that
+          material. It's a matter of having a deeper understanding of things rather than just
+          memorizing facts and figures. In fact, research shows that practicing self-testing and
+          effective study time strategies can improve long-term memory retention. For example,
+          people who can strategize which items in their notes should be prioritized for studying in a
+          set period of time are more likely to recall those items from memory over a longer period of
+          time. This can come in handy when preparing for a test; knowing which lessons should be
+          prioritized for studying can increase the chances of passing that test.
+        </p>
+
+        <p>
+          Having good study habits can also develop or boost the confidence of individuals or students
+          by giving the feeling that they control their studies and not their studies are controlling
+          them. It can also improve students' performance as well and can give structure to their lives.
+          In this way, good study habits can also reduce their stress.
+        </p>
+
+        <h3 class="title">Recommended Study Habits</h3>
+        
+        <p>Here are some recommended study habits:</p>
+
+        <div class="list">
+          <div class="image">
+            <img src="./img/focus.jpg" alt="Focus" width="100%" height="auto">
+          </div>
+          <div class="details">
+              <h5>Set aside any distractions</h5>
+              <p>Distractions can make you feel forgetful at times, usually when you get pulled away
+                from what you're doing and lose contact with your intentions, and having to retrace
+                where you left off.</p>
+              <p>There is only a lot of information your brain can process at the same time. So, doing
+                two or more tasks requires more brain power than just doing one. In doing academic
+                work, distractions can make you lose your attentiveness.</p>
+              <p>In the end, distractions take away productivity and push you to procrastination and
+                loss of capability. You can limit distractions by avoiding or turning them off, planning
+                ahead or practicing meditation. Distraction can also be initiated by physical ailments
+                so make sure to take care of yourself as well by taking breaks or sleeping when you
+                need to.</p>
+            </dl>
+          </div>
+        </div>
+
+        <div class="list">
+          <div class="image">
+            <img src="./img/break.jpg" alt="Focus" width="100%" height="auto">
+          </div>
+          <div class="details">
+              <h5>Take breaks when you need to</h5>
+              <p>Overworking, especially in academic set-ups can cause burnout and is harmful
+                against your overall performance. You may end up fighting that tiredness by fighting
+                against it, but you might spend too much time doing that to the point where you
+                become unproductive in your actual work.</p>
+              <p>Taking breaks can revitalize the energy you’ve lost and improve your overall mental
+                and physical health. You can take short breaks between study sessions, or simply
+                take a big break before taking your time to study. Make sure to rest moderately, and
+                in appropriate times.</p>
+            </dl>
+          </div>
+        </div>
+
+        <div class="list">
+          <div class="image">
+            <img src="./img/notes.jpg" alt="Focus" width="100%" height="auto">
+          </div>
+          <div class="details">
+              <h5>Use (active learning) techniques</h5>
+              <p>Sometimes, doing things the harder way takes away the time we can use for doing
+                other productive things, but doing it in a smarter way not only does the opposite,
+                but also helps us become more advanced, taking in our lessons more efficiently than
+                most.</p>
+              <p>Using active learning techniques can help you achieve this. There are a lot of
+                different techniques, including summarizing, note-taking, explaining concepts to
+                others, and taking practice quizzes. This list, in a way, is also a set of techniques.
+                What matters most is that it works efficiently and well for you.</p>
+            </dl>
+          </div>
+        </div>
+
+        <div class="list">
+          <div class="image">
+            <img src="./img/quiz.jpeg" alt="Focus" width="100%" height="auto">
+          </div>
+          <div class="details">
+              <h5>Dry-run your quizzes or tests</h5>
+              <p>Have you ever been in a situation where you put your heart and soul into studying all
+                night, only to find that most of what you studied isn’t in the actual test? So
+                unfortunately, you’re unfamiliar with everything on it.</p>
+              <p>Taking practice tests can give yourself a deeper look into your study gaps that you
+                can fill in until you get everything perfect. Not only that, but you will be more
+                relaxed after expecting the questions, layouts, answering methods, etc… and
+                guarantee yourself a high score.</p>
+            </dl>
+          </div>
+        </div>
+
+        <div class="list">
+          <div class="image">
+            <img src="./img/mindset.jpg" alt="Focus" width="100%" height="auto">
+          </div>
+          <div class="details">
+              <h5>Yield to a growth mindset</h5>
+              <p>Having a growth mindset means believing in your ability to learn and improve, and
+                understanding that challenges and failures are opportunities for growth. By contrast,
+                a fixed mindset can limit your potential and hold you back from reaching your goals.</p>
+            </dl>
+          </div>
+        </div>
+
+        <div class="list">
+          <div class="image">
+            <img src="./img/rewarding.jpeg" alt="Focus" width="100%" height="auto">
+          </div>
+          <div class="details">
+              <h5>Honor yourself</h5>
+              <p>Do you ever look at everything you're doing and wonder what it’s all for? It might
+                feel pointless, and you could be more prone to lack of motivation, which causes
+                distraction, losing self-care; becoming self-destructive in general.</p>
+              <p>A solution to this is rewarding yourself for your accomplishments. You can even cut
+                your sessions into pieces and reward yourself in between, maybe through resting, a
+                prize, etc… Your brain will associate doing this task to a pleasurable future, through
+                an objective. You’re sharing the pleasure of a promised future to your present self.</p>
+            </dl>
+          </div>
+        </div>
+
+        <div class="list">
+          <div class="image">
+            <img src="./img/advance.jpg" alt="Focus" width="100%" height="auto">
+          </div>
+          <div class="details">
+              <h5>Advance Study</h5>
+              <p>Procrastination is a very harmful threat to a student. It takes away our ability to do
+                what we need to do in the moment, frustrates and tires us, etc… by the end of it, our
+                work may not be as good as we want it to be; messy.</p>
+              <p>Studying in advance can help you efficiently pass you through lessons while also
+                being more organized and productive. You will have more time to do your work in a
+                way that you want to without constraint, and continue to do other things. It’s a way
+                to be relaxed while also accomplishing tasks.</p>
+            </dl>
+          </div>
+        </div>
+
+        <div class="list">
+          <div class="image">
+            <img src="./img/breakdown.jpg" alt="Focus" width="100%" height="auto">
+          </div>
+          <div class="details">
+              <h5>Break goals into smaller, more achievable tasks.</h5>
+              <p>When your teacher gives you a book to read, they usually don’t tell you to read the
+                whole thing in one sitting; instead, you’re made to read it through chapters. If not,
+                then doing this task would feel impossible and tedious, which gets in the way of
+                concentrating and progressing through it.</p>
+              <p>Breaking down goals is like a mixture of rewarding yourself and studying in advance.
+                You would be more mindful in these short bouts of tasks, without the stress of
+                wondering what more you have to do. It feels easier to get to this goal, so it feels
+                rewarding, so you keep going until you finish. You can do this by dividing your time
+                into a few minutes, or simply making a to-do-list/schedule.</p>
+            </dl>
+          </div>
+        </div>
+
+        <div class="list">
+          <div class="image">
+            <img src="./img/schedule.webp" alt="Focus" width="100%" height="auto">
+          </div>
+          <div class="details">
+              <h5>Intend your schedule.</h5>
+              <p>At some point in your school life, you might fall into being overwhelmed by work;
+                what do you have to do next? Is this everything you need to do? Did you miss
+                something? It can be very confusing and messy, having to retrace everything and
+                wasting time.</p>
+              <p>Scheduling gives you a glimpse into a quick and easy routine, and every step feels
+                rewarding. Not only that, but you become a lot more organized and up-to-date with
+                your deadlines. You could create one by writing your deadlines on something or
+                using a planner.</p>
+            </dl>
+          </div>
+        </div>
+
+        <div class="list">
+          <div class="image">
+            <img src="./img/mental.jpg" alt="Focus" width="100%" height="auto">
+          </div>
+          <div class="details">
+              <h5>Take care of yourself.</h5>
+              <p>Mental health is very important in life, overall. This could affect how you do at work
+                or in school. If this declines, it could lead to symptoms of illnesses like body-aches,
+                tiredness, loss of motivation, relentless thoughts and worries, emptiness, etc… all of
+                which should be dealt with appropriately, but that can also take you away from
+                doing academic tasks.</p>
+              <p>The best to do is to make sure that doesn’t happen by the onset. You can take a rest
+                or sleep when you have to, set up a routine to take a bath, eat, and do everything
+                you need to do with the most energy and desired emotion.</p>
+            </dl>
+          </div>
+        </div>
+
+        <div class="list">
+          <div class="image">
+            <img src="./img/peaceful.jpeg" alt="Focus" width="100%" height="auto">
+          </div>
+          <div class="details">
+              <h5>Set a good place to study regularly.</h5>
+              <p>When we study, we tend to sit down most of the time, just doing one thing at a time,
+                trying to handle whatever we have to handle.</p>
+              <p>It would be easier to study in a place where you won’t be prone to being distracted
+                by any kind of physical discomfort through noises, your chair, or any kind of
+                emotional stress. Pick a quiet place, with a comfortable area to sit or lay on. Give
+                yourself some area to lay your studying materials on and efficiently work with it.</p>
+            </dl>
+          </div>
+        </div>
+      </div>
+
+      <div v-show="shownPage == 'self-efficacy-test'">
+      </div>
 
       <div v-show="session.finished" class="message twelve columns">
         finished!
@@ -52,7 +335,7 @@
 
       <div class="controls twelve columns">
         <button type="button" @click="previousPage" :disabled="disablePrev">Previous</button>
-        <button class="button-primary" type="submit" @click="nextPage" :disabled="disableNext">Next</button>
+        <button class="button-primary" type="submit" @click.prevent="nextPage" :disabled="disableNext">Next</button>
       </div>
     </form>
   </script>
@@ -68,8 +351,8 @@
       <div class="card-body">
         <div class="card-content" v-if="question" v-html="question">{{question}}</div>
         <label v-if="answers" v-for="(answer, index) in answers" :class="{horizontalDisplay: 'horizontal'}">
-            <input type="radio" name="answer" :value="index" :id="'answer-' + index" :selected="index == ans" v-model="qAns" required/>
-            <span class="label-body" v-if="answer">{{answer}}</span>
+            <input type="radio" name="answer" :value="index + 1" :id="'answer-' + index" v-model="qAns" required/>
+            <span class="label-body">{{answer.prefix}}. {{answer.val}}</span>
         </label>
       </div>
     </div>
@@ -103,7 +386,7 @@
         <div class="additional-info twelve columns" v-if="additionalInfo">
           <dl>
             <li v-for="(addInfo, index) in additionalInfo">
-              <b>{{addInfo.title}}</b>
+              <strong v-html="addInfo.title">{{addInfo.title}}</strong>
               <p v-html="addInfo.text">{{addInfo.text}}</p>
             </li>
           </dl>

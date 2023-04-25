@@ -1,6 +1,6 @@
 {
   "sid": "learning-style-test",
-  "name": "Learning Style Test",
+  "title": "Learning Style Test",
   "active": true,
   "instructions": "Take this learning style test to identify your preferred way of learning:",
   "loadOrder": 0,

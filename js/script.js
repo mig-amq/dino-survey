@@ -1,18 +1,29 @@
+const DISPLAY_INTRO = "INTRO"
+const DISPLAY_RESULT = "RESULT"
+const DISPLAY_QUESTION = "QUESTION"
+const RESULT_MAJORITY = "majority"
+const RESULT_RANGE = "range"
+
+Vue.config.productionTip = true;
+Vue.config.devtools = true;
+
 $(document).ready(() => {
   const {App, Form, Card, Text} = initVueComponents(Vue)
-  Vue.config.productionTip = true;
-  Vue.config.devtools = true;
 
 })
 
 function displayQuestion(_vueObj) {
-  let survey = _vueObj.surveys[_vueObj.sid]
-  let question = survey.questions[_vueObj.session.qIndex]
-  
-  _vueObj.$refs.card.qAns = 0
-  _vueObj.$refs.card.title = survey.name.replace(/[\n\r]/g, '')
-  _vueObj.$refs.card.subtitle = survey.instructions.replace(/[\n\r]/g, '')
-  _vueObj.$refs.card.question = question.q.replace(/[\n\r]/g, '')
+  console.log("Displaying: Question " + _vueObj.session.current_survey + "-" + _vueObj.session.current_question)
+  console.log("Next Page: Page " + _vueObj.session.next_page)
+
+  let aCharCode = 65
+  let survey = shallowCopy(_vueObj.surveys[_vueObj.session.current_survey])
+  let question = shallowCopy(survey.questions[_vueObj.session.current_question])
+
+  _vueObj.$refs.card.qAns = 1
+  _vueObj.$refs.card.title = survey.name.replace(/\r\n/g, '<br/>')
+  _vueObj.$refs.card.subtitle = survey.instructions.replace(/\r\n/g, '<br/>')
+  _vueObj.$refs.card.question = question.q.replace(/\r\n/g, '<br/>')
   _vueObj.$refs.card.is_numerical = survey.numericalChoices
   _vueObj.$refs.card.horizontal_display = survey.horizontalDisplay
 
@@ -22,43 +33,128 @@ function displayQuestion(_vueObj) {
       answers.push(element)
     });
 
+    if (survey.numericalChoices) {
+      answers.forEach((val, index) => {
+        answers[index] = {
+          val: val,
+          prefix: index + 1
+        }
+      })
+    } else {
+      answers.forEach((val, index) => {
+        answers[index] = {
+          val: val,
+          prefix: String.fromCharCode(aCharCode + index)
+        }
+      })
+    }
+
     _vueObj.$refs.card.answers = answers
   } else {
+    
+    if (survey.numericalChoices) {
+      question.as.forEach((val, index) => {
+        question.as[index] = {
+          val: val,
+          prefix: index + 1
+        }
+      })
+    } else {
+      question.as.forEach((val, index) => {
+        question.as[index] = {
+          val: val,
+          prefix: String.fromCharCode(aCharCode + index)
+        }
+      })
+    }
+
     _vueObj.$refs.card.answers = question.as;
   }
 
-  if (question.a)
-    _vueObj.$refs.card.qAns = question.a
-  
-  _vueObj.page = 'vc-card'
+  if (_vueObj.session.answers[survey.sid][_vueObj.session.current_question])
+    _vueObj.$refs.card.qAns = _vueObj.session.answers[survey.sid][_vueObj.session.current_question]
+
+  _vueObj.shownPage = 'card'
+}
+
+function displayPage(_vueObj) {
+  console.log("Displaying: Page " + _vueObj.session.current_survey)
+  console.log("Next Page: Page " + _vueObj.session.next_page)
+
+  _vueObj.shownPage = _vueObj.session.current_survey
+}
+
+function answerQuestion(_vueObj) {
+  console.log("Answered: ", _vueObj.session.current_question, " with " + _vueObj.$refs.card.qAns)
+  console.log("Next Page: Page " + _vueObj.session.next_page)
+
+  if (_vueObj.$refs.card.qAns != null)
+    _vueObj.session.answers[_vueObj.session.current_survey][_vueObj.session.current_question] = _vueObj.$refs.card.qAns
 }
 
 function computeResults(sid, _vueObj) {
-  return _vueObj.survey_results[sid].results[0]
+  let compute_method = _vueObj.survey_results[sid].calculation
+  let result_index = 0
+
+  if (compute_method == RESULT_MAJORITY) {
+    let mapping = {}
+    let majority = 1
+
+    _vueObj.session.answers[sid].forEach((val) => {
+      if (mapping[val]) mapping[val]++
+      else mapping[val] = 1
+    })
+
+
+    Object.keys(mapping).forEach((val, ind) => {
+      if (mapping[val] > mapping[Object.keys(mapping)[majority]])
+        majority = val
+    })
+
+    _vueObj.survey_results[sid].results.forEach((result, index) => {
+      if (result.range[0] == majority) result_index = index
+    })
+
+  } else if (compute_method == RESULT_RANGE) {
+    let total = 0
+
+    _vueObj.session.answers[sid].forEach((val) => {
+      if (val != null)
+        total += val
+    })
+
+    _vueObj.survey_results[sid].results.forEach((result, index) => {
+      if (total >= result.range[0] && total <= result.range[1]) {
+        result_index = index
+      }
+    })
+  }
+
+  return _vueObj.survey_results[sid].results[result_index]
 }
 
-function displayFinished(_vueObj) {
-  let sid = _vueObj.sid
+function displayResults(_vueObj) {
+  console.log("Displaying: Results " + _vueObj.session.current_survey)
+  console.log("Next Page: Page " + _vueObj.session.next_page)
 
-  if (_vueObj.sid == null) {
-    sid = _vueObj._survey_keys[_vueObj._survey_keys.length - 1]
-  }
+  _vueObj.shownPage = 'text'
+  let current_survey = _vueObj.session.current_survey
 
   _vueObj.$refs.texts = null
 
-  if (_vueObj.session.finished || (_vueObj.session.sid == null && _vueObj.settings.display_all_results_at_end)) {
+  if (_vueObj.session.finished && _vueObj.settings.display_all_results_at_end) {
     let texts = []
     let survey_results_keys = Object.keys(_vueObj.survey_results)
 
     for (i = survey_results_keys.length - 1; i >= 0; i--) {
-      sid = _vueObj._survey_keys[i]
-      let survey_results = computeResults(sid, _vueObj)
+      current_survey = _vueObj.survey_keys[i]
+      let survey_results = computeResults(current_survey, _vueObj)
 
       texts.push({
         ifInput: false,
-        title: _vueObj.surveys[sid].name.replace(/[\n\r]/g, ''),
-        subtitle: survey_results.title.replace(/[\n\r]/g, ''),
-        content: survey_results.text.replace(/[\n\r]/g, ''),
+        title: _vueObj.surveys[current_survey].name.replace(/\r\n/g, '<br/>'),
+        subtitle: survey_results.title.replace(/\r\n/g, '<br/>'),
+        content: survey_results.text.replace(/\r\n/g, '<br/>'),
         additionalInfo: survey_results.additionalInfo
       })
     }
@@ -66,29 +162,56 @@ function displayFinished(_vueObj) {
     _vueObj.$refs.text.texts = texts
 
   } else {
-    let survey = _vueObj.surveys[sid]
-    let survey_results = computeResults(sid, _vueObj)
+    let survey = _vueObj.surveys[current_survey]
+    let survey_results = computeResults(current_survey, _vueObj)
 
     _vueObj.$refs.text.ifInput = false
-    _vueObj.$refs.text.title = survey.name.replace(/[\n\r]/g, '')
-    _vueObj.$refs.text.subtitle = survey_results.title.replace(/[\n\r]/g, '')
-    _vueObj.$refs.text.content =  survey_results.text.replace(/[\n\r]/g, '')
+    _vueObj.$refs.text.title = survey.name.replace(/\r\n/g, '<br/>')
+    _vueObj.$refs.text.subtitle = survey_results.title.replace(/\r\n/g, '<br/>')
+    _vueObj.$refs.text.content =  survey_results.text.replace(/\r\n/g, '<br/>')
     _vueObj.$refs.text.additionalInfo =  survey_results.additionalInfo
   }
 
-  _vueObj.page = 'vc-text'
+  // _vueObj.page = 'vc-text'
 }
 
 function saveSession(_vueObj, _db) {
-  return new Promise((resolve, reject) => {
-    _db.collection('sessions').doc(_vueObj.$refs.text.email).set(_vueObj.session).then((function (snap0) {
-      resolve(snap0)
-    }))
-  })
+  toggleLoading()
+  let prevStat = _vueObj.disablePrev
+  let nextStat = _vueObj.disableNext
+
+  _vueObj.disableNext = true
+  _vueObj.disablePrev = true
+
+  if (!_vueObj.fromPrevious) {
+    return new Promise((resolve, reject) => {
+      _db.collection('sessions').doc(_vueObj.$refs.text.email).set(_vueObj.session).then((function (snap0) {
+        _vueObj.disableNext = nextStat
+        _vueObj.disablePrev = prevStat
+        toggleLoading()
+        resolve(snap0)
+      }))
+    })
+  } else {
+    return new Promise((resolve, reject) => {
+      _db.collection('sessions').doc(_vueObj.$refs.text.email).update({
+        answers: _vueObj.session.answers
+      }).then((function (snap0) {
+        _vueObj.disableNext = nextStat
+        _vueObj.disablePrev = prevStat
+        toggleLoading()
+        resolve(snap0)
+      }))
+    })
+  }
 }
 
 function shallowCopy(jsonObj) {
   return JSON.parse(JSON.stringify(jsonObj))
+}
+
+function toggleLoading() {
+  $(".loading").toggleClass("active")
 }
 
 function initVueComponents(_V) {
@@ -130,59 +253,55 @@ function initVueComponents(_V) {
     data() {
         return {
           page: "vc-text",
-          action: "#",
-          method: "POST",
-          qid: null,
-          sid: null,
           session: {},
           message: null,
-          surveys: {},
-          survey_results: {},
           disableNext: false,
           disablePrev: true,
-          sessID: "",
+          shownPage: 'text',
           settings: {},
-          _survey_keys: []
+          surveys: {},
+          survey_keys: [],
+          survey_results: {},
+          fromPrevious: false
         }
       },
     mounted() {
       this.$refs.text.ifInput=true
       this.$refs.text.title="Welcome!"
-      this._survey_keys = []
-
+      this.survey_keys = []
+      
       // load from surveys from db
       db.collection('surveys').get().then(function (snap) {
+        this.session.answers = {}
+        
         snap.forEach(function (doc) {
-          this.surveys[doc.id] = doc.data()
-          this._survey_keys.push(doc.id)
+          this.surveys[doc.id] = shallowCopy(doc.data())
+          this.survey_keys.push(doc.id)
 
-          if (this.session['surveys']) {
-            this.session['surveys'][doc.id] = shallowCopy(doc.data())
-          } else {
-            this.session['surveys'] = {}
-            this.session['surveys'][doc.id] = shallowCopy(doc.data())
-          }
+          this.session.answers[doc.id] = []
+
+          this.surveys[doc.id].questions.forEach(function () {
+            this.session.answers[doc.id].push(null)
+          }.bind(this))
         }.bind(this))
 
-        let fsID = Object.keys(this.surveys)[0]
-        this.session['_survey_keys'] = this._survey_keys
-        this.session['qid'] = this.surveys[fsID].questions[0].qid
-        this.session['qIndex'] = 0
+        this.session.surveys = this.survey_keys
 
-        this.session['sid'] = this.surveys[fsID].sid
-        this.session['finished'] = false
+        this.session.current_question = null
+        this.session.next_question = null
+
+        this.session.current_page = null
+        this.session.next_page = null
+
+        this.session.current_survey = null
+        this.session.next_survey = null
+
+        this.session.finished = false
       }.bind(this))
 
       db.collection('survey-results').get().then(function (snap) {
         snap.forEach(function (doc) {
           this.survey_results[doc.id] = doc.data()
-
-          if (this.session['survey_results']) {
-            this.session['survey_results'][doc.id] = shallowCopy(doc.data())
-          } else {
-            this.session['survey_results'] = {}
-            this.session['survey_results'][doc.id] = shallowCopy(doc.data())
-          }
         }.bind(this))
       }.bind(this))
 
@@ -195,154 +314,197 @@ function initVueComponents(_V) {
     methods: {
       previousPage(event) {
         if (!this.disablePrev) {
-          if (this.qid != null && !(this._survey_keys.indexOf(this.sid) == 0 && this.session.qIndex == 0)) {
-            if (this.session.qIndex > 0) {
-              this.session.qIndex--;
-              this.qid = this.surveys[this.sid].questions[this.session.qIndex].qid
+          if (!this.session.finished) {
+            if (this.session.current_page != DISPLAY_RESULT) {
+              if (this.session.current_page == DISPLAY_INTRO) {
+                // check if went past a results page
+                let curr_survey_index = this.session.surveys.indexOf(this.session.current_survey)
 
-              if (this.session.qIndex == 0)
-                this.disablePrev = true
+                if (this.settings.display_results_after_survey && curr_survey_index > 0) {
+                  // display results page from previous survey
+                  let prev_survey_index = curr_survey_index - 1
 
-              displayQuestion(this)
+                  if (prev_survey_index >= 0) {
+                    this.session.current_page = DISPLAY_RESULT
+                    this.session.next_page = DISPLAY_INTRO
+                    
+                    this.session.next_survey = this.session.current_survey
+                    this.session.current_survey = this.session.surveys[prev_survey_index]
+                  }
+                  
+                  this.disablePrev = true
+                  this.fromPrevious = true
+                  displayResults(this)
+                }
+              } else if (this.session.current_page == DISPLAY_QUESTION) {
+                // check if previous page was an intro page or a question
+                let curr_survey_index = this.session.surveys.indexOf(this.session.current_survey)
+                if (this.session.current_question > 0) {
+                  // go back to intro
+                  this.session.current_page = DISPLAY_QUESTION
+                  this.session.next_page = DISPLAY_QUESTION
+                  
+                  this.session.next_question = this.session.current_question
+                  this.session.current_question = this.session.current_question - 1
+
+                  this.disablePrev = false
+                  this.fromPrevious = true
+                  displayQuestion(this)
+                } else {
+                  this.session.current_page = DISPLAY_INTRO
+                  this.session.next_page = DISPLAY_QUESTION
+                  
+                  if (curr_survey_index <= 0) 
+                    this.disablePrev = true
+
+                  this.fromPrevious = true
+                  displayPage(this)
+                }
+              }
             }
-          } else {
-            this.disablePrev = true
           }
         }
       },
 
       nextPage(event) {
-        event.preventDefault()
-
         if (!this.disableNext) {
           if (!this.session.finished) {
-            // check for email
-            if (this.qid == null && this.sid == null) {
-              this.session['email'] = this.$refs.text.email
-              this.sessID = this.session.email
+            if (this.session.next_page == DISPLAY_INTRO) {
+              // display intro for survey
+              // check if came from landing page
+              if (this.session.current_page == null) {
+                this.session.current_survey = this.session.surveys[0]
 
+                if (this.session.surveys.length > 1)
+                  this.session.next_survey = this.session.surveys[1]
+
+                  this.disablePrev = true
+              } else {
+                if (this.session.current_page == DISPLAY_QUESTION) {
+                  this.fromPrevious = false
+                  answerQuestion(this)
+                } else if (this.session.current_page == DISPLAY_RESULT) {
+                  this.session.current_survey = this.session.next_survey
+
+                  // move to next survey
+                  this.session.current_survey = this.session.next_survey
+                  let curr_survey_index = this.session.surveys.indexOf(this.session.current_survey)
+
+                  if (curr_survey_index != -1 && curr_survey_index + 1 < this.session.surveys.length) {
+                    this.session.next_survey = this.session.surveys[curr_survey_index]
+                  } else {
+                    this.session.next_survey = null
+                  }
+
+                  if (curr_survey_index > 0)
+                    this.disablePrev = false
+                  else
+                    this.disablePrev = true
+                }
+              }
+
+              this.session.current_page = DISPLAY_INTRO
+              this.session.next_page = DISPLAY_QUESTION
+              saveSession(this, db).then(function (snap0) {
+                displayPage(this)
+              }.bind(this))
+            } else if (this.session.next_page == DISPLAY_QUESTION) {
+              // check if came from intro page
+              if (this.session.current_page == DISPLAY_INTRO || this.session.current_page == DISPLAY_RESULT) {
+                // display initial question only
+                this.session.current_page = DISPLAY_QUESTION
+                this.session.current_question = 0
+                this.session.next_question = 1
+
+                saveSession(this, db).then(function (snap0) {
+                  this.disablePrev = false
+                  displayQuestion(this)
+                }.bind(this));
+              } else if (this.session.current_page == DISPLAY_QUESTION) {
+                // came from previous question
+                // todo answer previous question
+                this.fromPrevious = false
+                answerQuestion(this)
+
+                this.session.current_question = this.session.next_question
+                this.session.next_question = this.session.current_question + 1
+                if (this.session.next_question >= this.surveys[this.session.current_survey].questions.length) {
+                  if(this.settings.display_results_after_survey) {
+                    this.session.next_page = DISPLAY_RESULT
+                  } else {
+                    this.session.next_page = DISPLAY_INTRO
+                  }
+                }
+                
+                saveSession(this, db).then(function (snap0) {
+                  this.disablePrev = false
+                  displayQuestion(this)
+                }.bind(this));
+              }
+            } else if (this.session.next_page == DISPLAY_RESULT) {
+              if (this.session.current_page == DISPLAY_QUESTION) {
+                this.fromPrevious = false
+                answerQuestion(this)
+
+                // check if came from final question
+                if (this.session.next_question >= this.surveys[this.session.current_survey].questions.length) {
+                  // check if in final survey
+                  if (this.session.next_survey == null) {
+                    this.session.finished = true
+                    this.session.next_page = null
+                    this.session.next_question = null
+
+                    this.disableNext = true
+                  } else {
+                    this.session.next_page = DISPLAY_INTRO
+                  }
+                } else {
+                  this.session.next_page = DISPLAY_INTRO
+                }
+              }
+              
+              this.session.current_page = DISPLAY_RESULT
+              saveSession(this, db).then(function (snap0) {
+                this.disablePrev = true
+                displayResults(this)
+              }.bind(this));
+            } else {
+              // current_page is null means landing page was displayed
               db.collection('sessions').doc(this.$refs.text.email).get().then((function (snap) {
                 if (snap.exists) {
                   this.session = shallowCopy(snap.data())
-                  this.surveys = shallowCopy(this.session['surveys'])
-                  this.survey_results = shallowCopy(this.session['survey_results'])
-
-                  this._survey_keys = shallowCopy(this.session['_survey_keys'])
-                  
-                  this.qid = this.session.qid
-                  this.sid = this.session.sid
 
                   if (this.session.finished) {
                     this.disableNext = true
                     this.disablePrev = true
-
-                    console.log("displayFinished 1")
-                    displayFinished(this)
-                  } else {
-                    if (this.qid != null && !(this._survey_keys.indexOf(this.sid) == 0 && this.session.qIndex == 0))
+                    displayResults(this)
+                  } else if (this.session.current_page == DISPLAY_QUESTION){
+                    this.disableNext = false
+                    this.disablePrev = false
+                    displayQuestion(this)
+                  } else if (this.session.current_page == DISPLAY_INTRO) {
+                    if (Object.keys(this.session.surveys)[0] == this.session.current_survey) {
+                      this.disablePrev = true
+                    } else {
                       this.disablePrev = false
-
-                      if (this.sid != null && this.qid == null && this.session.qIndex == -1)
-                        this.nextPage(event)
-                      else
-                        displayQuestion(this)
+                    }
+                    
+                    displayPage(this)
+                  } else if (this.session.current_page == DISPLAY_RESULT) {
+                    displayResults(this)
                   }
-                  
                 } else {
                   db.collection('sessions').doc(this.$refs.text.email).set(this.session).then((function (snap0) {
-                    this.qid = this.session.qid
-                    this.sid = this.session.sid
-                    this.disablePrev = true
+                    this.session.current_page = null
+                    this.session.next_page = DISPLAY_INTRO
                     
-                    displayQuestion(this)
+                    this.nextPage(this)
                   }).bind(this))
                 }
               }).bind(this))
-            } 
-            else if (this.qid != null && this.sid != null) {
-              let _survey_key_ind = this.session._survey_keys.indexOf(this.session.sid)
-              this.disablePrev = false
-
-              if (this.session.qIndex == -1) {
-                this.session.qIndex = 0
-                // todo move to next survey
-                this.sid = this.session.surveys[this.session._survey_keys[_survey_key_ind + 1]].sid
-                this.session.sid = this.sid
-                this.disablePrev = true
-
-                saveSession(this, db).then(((snap) => {
-                  displayQuestion(this)
-                }).bind(this))
-              } else {
-                // todo answer survey
-                this.session.surveys[this.sid].questions[this.session.qIndex].a = parseInt(this.$refs.card.qAns)
-                this.surveys[this.sid].questions[this.session.qIndex].a = parseInt(this.$refs.card.qAns)
-
-                // move to next question
-                if (this.session.qIndex < this.session.surveys[this.session.sid].questions.length - 1) {
-                  this.session.qIndex++
-                  this.session.qid = this.session.surveys[this.session.sid].questions[this.session.qIndex].qid
-
-                  this.qid = this.session.qid
-
-                  saveSession(this, db).then(((snap) => {
-                    displayQuestion(this)
-                  }).bind(this))
-                } 
-                else if (this.session.qIndex >= this.session.surveys[this.session.sid].questions.length - 1 &&
-                         this.session._survey_keys.indexOf(this.session.sid) >= this.session._survey_keys.length - 1) {
-                  // move to finished
-                  this.session.finished = true
-                  this.session.sid = null
-                  this.session.qid = null
-                  this.session.qIndex = 0
-                  
-                  saveSession(this, db).then(((snap) => {
-                    this.disableNext = true
-                    this.disablePrev = true
-                    this.sid = null
-                    this.qid = null
-                    
-                    console.log("displayFinished 2")
-                    displayFinished(this)
-                  }).bind(this))
-                }
-                // move to next survey
-                else {
-                  this.disablePrev = true
-                  this.session.qIndex = -1
-                  this.session.qid = null
-                  this.qid = null
-
-                  saveSession(this, db).then(((snap) => {
-                    this.nextPage(event)
-                  }).bind(this))
-                }
-              }
-            }
-            // show final result or skip to next survey
-            else if (this.sid != null) {
-              let _survey_key_ind = this.session._survey_keys.indexOf(this.session.sid)
-              
-              if (_survey_key_ind > -1) {
-                this.qid = this.session.surveys[this.session._survey_keys[_survey_key_ind + 1]].questions[0].qid
-                this.session.qid = this.qid
-
-                if (this.settings.display_results_after_survey) {
-                  // display result for survey
-                  this.disablePrev = true
-                  console.log("displayFinished 3")
-                  displayFinished(this)
-                } else {
-                  // move to next survey
-                  this.disablePrev = true
-                  this.nextPage(event)
-                }
-              }
             }
           } else {
-            console.log("displayFinished 4")
-            displayFinished(this)
+            displayResults(this)
           }
         }
       },
