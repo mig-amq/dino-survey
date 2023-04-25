@@ -75,6 +75,7 @@ function displayQuestion(_vueObj) {
     _vueObj.$refs.card.qAns = _vueObj.session.answers[survey.sid][_vueObj.session.current_question]
 
   _vueObj.shownPage = 'card'
+  document.body.scrollTop = document.documentElement.scrollTop = 0;
 }
 
 function displayPage(_vueObj) {
@@ -82,6 +83,7 @@ function displayPage(_vueObj) {
   console.log("Next Page: Page " + _vueObj.session.next_page)
 
   _vueObj.shownPage = _vueObj.session.current_survey
+  document.body.scrollTop = document.documentElement.scrollTop = 0;
 }
 
 function answerQuestion(_vueObj) {
@@ -98,7 +100,7 @@ function computeResults(sid, _vueObj) {
 
   if (compute_method == RESULT_MAJORITY) {
     let mapping = {}
-    let majority = 1
+    let majority = 0
 
     _vueObj.session.answers[sid].forEach((val) => {
       if (mapping[val]) mapping[val]++
@@ -107,8 +109,8 @@ function computeResults(sid, _vueObj) {
 
 
     Object.keys(mapping).forEach((val, ind) => {
-      if (mapping[val] > mapping[Object.keys(mapping)[majority]])
-        majority = val
+      if (val > mapping[Object.keys(mapping)[majority]])
+        majority = ind
     })
 
     _vueObj.survey_results[sid].results.forEach((result, index) => {
@@ -133,11 +135,19 @@ function computeResults(sid, _vueObj) {
   return _vueObj.survey_results[sid].results[result_index]
 }
 
+function validateEmail(mail) 
+{
+ if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail))
+  {
+    return (true)
+  }
+    return (false)
+}
+
 function displayResults(_vueObj) {
   console.log("Displaying: Results " + _vueObj.session.current_survey)
   console.log("Next Page: Page " + _vueObj.session.next_page)
 
-  _vueObj.shownPage = 'text'
   let current_survey = _vueObj.session.current_survey
 
   _vueObj.$refs.texts = null
@@ -155,7 +165,8 @@ function displayResults(_vueObj) {
         title: _vueObj.surveys[current_survey].name.replace(/\r\n/g, '<br/>'),
         subtitle: survey_results.title.replace(/\r\n/g, '<br/>'),
         content: survey_results.text.replace(/\r\n/g, '<br/>'),
-        additionalInfo: survey_results.additionalInfo
+        additionalInfo: survey_results.additionalInfo,
+        image: survey_results.image
       })
     }
 
@@ -170,9 +181,12 @@ function displayResults(_vueObj) {
     _vueObj.$refs.text.subtitle = survey_results.title.replace(/\r\n/g, '<br/>')
     _vueObj.$refs.text.content =  survey_results.text.replace(/\r\n/g, '<br/>')
     _vueObj.$refs.text.additionalInfo =  survey_results.additionalInfo
+    _vueObj.$refs.text.image = survey_results.image
   }
 
   // _vueObj.page = 'vc-text'
+  document.body.scrollTop = document.documentElement.scrollTop = 0;
+  _vueObj.shownPage = 'text'
 }
 
 function saveSession(_vueObj, _db) {
@@ -243,7 +257,8 @@ function initVueComponents(_V) {
         ifInput: null,
         email: '',
         additionalInfo: "",
-        texts: null
+        texts: null,
+        image: null
       }
     }
   })
@@ -372,7 +387,8 @@ function initVueComponents(_V) {
       nextPage(event) {
         if (this.$refs.text.email && !this.disableNext){
           this.$refs.text.email = this.$refs.text.email.trim()
-          if (this.$refs.text.email.length > 0) {
+
+          if (this.$refs.text.email.length > 0 && validateEmail(this.$refs.text.email)) {
             this.message = null
             if (!this.session.finished) {
               if (this.session.next_page == DISPLAY_INTRO) {
@@ -515,7 +531,7 @@ function initVueComponents(_V) {
           } else {
             this.message = {
               type: 'error',
-              text: 'Email address is required.'
+              text: 'A valid email address must be entered.'
             }
           }
         } else {

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Survey Questionnaire</title>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js' integrity='sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==' crossorigin='anonymous'></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.14/vue.min.js" integrity="sha512-BAMfk70VjqBkBIyo9UTRLl3TBJ3M0c6uyy2VMUrq370bWs7kchLNN9j1WiJQus9JAJVqcriIUX859JOm12LWtw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.14/vue.js" integrity="sha512-pzaIT4M4pWutHYv8yQrtkMtHBB17qXE6LnS7d9R6oiGQ+zApGM1T+ADe+J9borsHmdMGB3JHhfDsdkavD876nQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css' integrity='sha512-EZLkOqwILORob+p0BXZc+Vm3RgJBOe1Iq/0fiI7r/wJgzOFZMlsqTa29UEl6v6U6gsV4uIpsNZoV32YZqrCRCQ==' crossorigin='anonymous'/>
+  <link rel="stylesheet" href="./css/index.css">
+
+  <script>
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBQ7xRAjS_F0MG8Eqgv9ztutIhBa8en2RE",
+      authDomain: "dino-survey.firebaseapp.com",
+      projectId: "dino-survey",
+      storageBucket: "dino-survey.appspot.com",
+      messagingSenderId: "361608865739",
+      appId: "1:361608865739:web:f1f45452a317e02b22b84e"
+    };
+  
+    // Initialize Firebase
+    const firebaseApp = firebase.initializeApp(firebaseConfig);
+
+    const db = firebase.firestore(firebaseApp);
+  </script>
+
+  <script src="./js/preload.js"></script>
+</head>
+<body>
+  <div class="loading">Loading...</div>
+
+  <div id="app" class="container">
+  </div>
+
+
+  <!-- Vue Components-->
+  <script type="text/x-template" id="vc-result-data">
+
+  </script>
+
+  <script type="text/x-template" id="vc-result-list">
+    
+  </script>
+  
+  <script src="./js/admin.js"></script>
+</body>
+</html>

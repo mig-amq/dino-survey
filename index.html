@@ -387,6 +387,9 @@
       <div class="text row" v-for="(text, index) in texts" style="margin-bottom: 25px;">
         <h3 class="title twelve columns" v-if="text.title">{{text.title}}</h3>
         <strong class="subtitle twelve columns" v-if="text.subtitle">{{subtitle}}</strong>
+        <div class="text-image" v-if="text.image">
+          <img :src="'./img/{{text.image}}'" alt="">
+        </div>
         <div class="content twelve columns" v-html="text.content">
           {{content}}
         </div>
@@ -411,6 +414,9 @@
       <div class="text row">
         <h3 class="title twelve columns" v-if="title">{{title}}</h3>
         <strong class="subtitle twelve columns" v-if="subtitle">{{subtitle}}</strong>
+        <div class="text-image" v-if="image">
+          <img :src="'./img/{{image}}'" alt="">
+        </div>
         <div class="content twelve columns" v-html="content">
           {{content}}
         </div>
