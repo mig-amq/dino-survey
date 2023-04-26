@@ -100,21 +100,22 @@ function computeResults(sid, _vueObj) {
 
   if (compute_method == RESULT_MAJORITY) {
     let mapping = {}
-    let majority = 0
+    let majority_key = 1
 
     _vueObj.session.answers[sid].forEach((val) => {
       if (mapping[val]) mapping[val]++
       else mapping[val] = 1
     })
 
-
-    Object.keys(mapping).forEach((val, ind) => {
-      if (val > mapping[Object.keys(mapping)[majority]])
-        majority = ind
+    let mapping_keys = Object.keys(mapping)
+    majority_key = mapping_keys[0]
+    mapping_keys.forEach((key, ind) => {
+      if (mapping[key] > mapping[majority_key])
+        majority_key = key
     })
 
     _vueObj.survey_results[sid].results.forEach((result, index) => {
-      if (result.range[0] == majority) result_index = index
+      if (result.range[0] == majority_key) result_index = index
     })
 
   } else if (compute_method == RESULT_RANGE) {
@@ -155,15 +156,21 @@ function displayResults(_vueObj) {
   if (_vueObj.session.finished && _vueObj.settings.display_all_results_at_end) {
     let texts = []
     let survey_results_keys = Object.keys(_vueObj.survey_results)
+    let subtitle = ""
 
     for (i = survey_results_keys.length - 1; i >= 0; i--) {
       current_survey = _vueObj.survey_keys[i]
       let survey_results = computeResults(current_survey, _vueObj)
 
+      if (current_survey == "self-efficacy-test") {
+        let sum = _vueObj.session.answers[current_survey].reduce((prev, curr) => prev + curr, 0)
+        subtitle = "You got a self-efficacy score of " + sum + " out of 50"
+      }
+
       texts.push({
         ifInput: false,
         title: _vueObj.surveys[current_survey].name.replace(/\r\n/g, '<br/>'),
-        subtitle: survey_results.title.replace(/\r\n/g, '<br/>'),
+        subtitle: subtitle,
         content: survey_results.text.replace(/\r\n/g, '<br/>'),
         additionalInfo: survey_results.additionalInfo,
         image: survey_results.image
@@ -176,9 +183,14 @@ function displayResults(_vueObj) {
     let survey = _vueObj.surveys[current_survey]
     let survey_results = computeResults(current_survey, _vueObj)
 
+    if (current_survey == "self-efficacy-test") {
+      let sum = _vueObj.session.answers[current_survey].reduce((prev, curr) => prev + curr, 0)
+      subtitle = "You got a self-efficacy score of " + sum + " out of 50"
+    }
+
     _vueObj.$refs.text.ifInput = false
     _vueObj.$refs.text.title = survey.name.replace(/\r\n/g, '<br/>')
-    _vueObj.$refs.text.subtitle = survey_results.title.replace(/\r\n/g, '<br/>')
+    _vueObj.$refs.text.subtitle = subtitle
     _vueObj.$refs.text.content =  survey_results.text.replace(/\r\n/g, '<br/>')
     _vueObj.$refs.text.additionalInfo =  survey_results.additionalInfo
     _vueObj.$refs.text.image = survey_results.image
