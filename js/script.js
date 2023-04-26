@@ -14,8 +14,121 @@ function random_rgba() {
 
 $(document).ready(() => {
   const {App, Form, Card, Text} = initVueComponents(Vue)
+
+  particlesJS("particles", {
+    particles: {
+        number: {
+            value: 80,
+            density: {
+                enable: !0,
+                value_area: 800
+            }
+        },
+        color: {
+            value: "#545454"
+        },
+        shape: {
+            type: "circle",
+            stroke: {
+                width: 0,
+                color: "#000000"
+            },
+            polygon: {
+                nb_sides: 5
+            }
+        },
+        opacity: {
+            value: .5,
+            random: !1,
+            anim: {
+                enable: !1,
+                speed: 1,
+                opacity_min: .1,
+                sync: !1
+            }
+        },
+        size: {
+            value: 3,
+            random: !0,
+            anim: {
+                enable: !1,
+                speed: 40,
+                size_min: .1,
+                sync: !1
+            }
+        },
+        line_linked: {
+            enable: !0,
+            distance: 150,
+            color: "#1b1b1b",
+            opacity: .4,
+            width: 1
+        },
+        move: {
+            enable: !0,
+            speed: 2,
+            direction: "none",
+            random: !1,
+            straight: !1,
+            out_mode: "out",
+            bounce: !1,
+            attract: {
+                enable: !1,
+                rotateX: 600,
+                rotateY: 1200
+            }
+        }
+    },
+    interactivity: {
+        detect_on: "canvas",
+        events: {
+            onhover: {
+                enable: !0,
+                mode: "repulse"
+            },
+            onclick: {
+                enable: !1,
+                mode: "push"
+            },
+            resize: !0
+        },
+        modes: {
+            grab: {
+                distance: 400,
+                line_linked: {
+                    opacity: 1
+                }
+            },
+            bubble: {
+                distance: 400,
+                size: 40,
+                duration: 2,
+                opacity: 8,
+                speed: 3
+            },
+            repulse: {
+                distance: 200,
+                duration: .4
+            },
+            push: {
+                particles_nb: 4
+            },
+            remove: {
+                particles_nb: 2
+            }
+        }
+    },
+    retina_detect: !0
+  })
+
+  $("#startNow").click(() => scrollTop())
 })
 
+function scrollTop() {
+  $("html, body").animate({
+    scrollTop: $("#main").offset().top
+  }, 500)
+}
 function displayQuestion(_vueObj) {
   console.log("Displaying: Question " + _vueObj.session.current_survey + "-" + _vueObj.session.current_question)
   console.log("Next Page: Page " + _vueObj.session.next_page)
@@ -79,7 +192,7 @@ function displayQuestion(_vueObj) {
     _vueObj.$refs.card.qAns = _vueObj.session.answers[survey.sid][_vueObj.session.current_question]
 
   _vueObj.shownPage = 'card'
-  document.body.scrollTop = document.documentElement.scrollTop = 0;
+  scrollTop()
 }
 
 function displayPage(_vueObj) {
@@ -87,7 +200,7 @@ function displayPage(_vueObj) {
   console.log("Next Page: Page " + _vueObj.session.next_page)
 
   _vueObj.shownPage = _vueObj.session.current_survey
-  document.body.scrollTop = document.documentElement.scrollTop = 0;
+  scrollTop()
 }
 
 function answerQuestion(_vueObj) {
@@ -202,7 +315,7 @@ function displayResults(_vueObj) {
   }
 
   // _vueObj.page = 'vc-text'
-  document.body.scrollTop = document.documentElement.scrollTop = 0;
+  scrollTop()
   _vueObj.shownPage = 'text'
 }
 

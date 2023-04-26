@@ -6,14 +6,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Survey Questionnaire</title>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js' integrity='sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==' crossorigin='anonymous'></script>
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.14/vue.min.js" integrity="sha512-BAMfk70VjqBkBIyo9UTRLl3TBJ3M0c6uyy2VMUrq370bWs7kchLNN9j1WiJQus9JAJVqcriIUX859JOm12LWtw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.14/vue.js" integrity="sha512-pzaIT4M4pWutHYv8yQrtkMtHBB17qXE6LnS7d9R6oiGQ+zApGM1T+ADe+J9borsHmdMGB3JHhfDsdkavD876nQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
   <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="http://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
   <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css' integrity='sha512-EZLkOqwILORob+p0BXZc+Vm3RgJBOe1Iq/0fiI7r/wJgzOFZMlsqTa29UEl6v6U6gsV4uIpsNZoV32YZqrCRCQ==' crossorigin='anonymous'/>
   <link rel="stylesheet" href="./css/index.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
   <script>
     // Your web app's Firebase configuration
@@ -37,35 +41,20 @@
 <body>
   <div class="loading">Loading&#8230;</div>
   
-  <div data-v-04e2347d="" data-v-0075175e="" class="editor">
-    <span data-v-04e2347d=""><style>
-          .glass-initial {
-              /* From https://css.glass */
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 16px;
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-      backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-          }
-          .glass {
-              /* From https://css.glass */
-      background: rgba(255, 255, 255, 0.31);
-      border-radius: 16px;
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-      backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-          }
-      </style></span> 
-      <div data-v-053f5fce="" data-v-04e2347d="" class="scattered-previews">
-        <div data-v-053f5fce="" class="glass" style="width: 130px; height: 181px; top: 495px; left: 818px; transform: rotate(0.154209turn); opacity: 0.294125;"></div><div data-v-053f5fce="" class="glass" style="width: 125px; height: 147px; top: 15px; left: 946px; transform: rotate(0.791246turn); opacity: 0.229687;"></div><div data-v-053f5fce="" class="glass" style="width: 141px; height: 102px; top: 695px; left: 947px; transform: rotate(0.850718turn); opacity: 0.179775;"></div><div data-v-053f5fce="" class="glass" style="width: 67px; height: 145px; top: 39px; left: 1234px; transform: rotate(0.496042turn); opacity: 0.121438;"></div><div data-v-053f5fce="" class="glass" style="width: 71px; height: 61px; top: 158px; left: 263px; transform: rotate(0.152244turn); opacity: 0.0541375;"></div><div data-v-053f5fce="" class="glass" style="width: 76px; height: 84px; top: 693px; left: 534px; transform: rotate(0.571033turn); opacity: 0.0798;"></div><div data-v-053f5fce="" class="glass" style="width: 156px; height: 122px; top: 512px; left: 627px; transform: rotate(0.480591turn); opacity: 0.2379;"></div><div data-v-053f5fce="" class="glass" style="width: 144px; height: 174px; top: 73px; left: 73px; transform: rotate(0.737825turn); opacity: 0.3132;"></div><div data-v-053f5fce="" class="glass" style="width: 113px; height: 139px; top: 380px; left: 560px; transform: rotate(0.0911117turn); opacity: 0.196337;"></div><div data-v-053f5fce="" class="glass" style="width: 182px; height: 73px; top: 618px; left: 538px; transform: rotate(0.116466turn); opacity: 0.166075;"></div><div data-v-053f5fce="" class="glass" style="width: 125px; height: 167px; top: 490px; left: 1031px; transform: rotate(0.748427turn); opacity: 0.260937;"></div><div data-v-053f5fce="" class="glass" style="width: 50px; height: 153px; top: 322px; left: 195px; transform: rotate(0.328412turn); opacity: 0.095625;"></div><div data-v-053f5fce="" class="glass" style="width: 160px; height: 123px; top: 240px; left: 165px; transform: rotate(0.0436049turn); opacity: 0.246;"></div><div data-v-053f5fce="" class="glass" style="width: 80px; height: 151px; top: 654px; left: 1282px; transform: rotate(0.397227turn); opacity: 0.151;"></div><div data-v-053f5fce="" class="glass" style="width: 167px; height: 71px; top: 144px; left: 1222px; transform: rotate(0.430454turn); opacity: 0.148212;"></div><div data-v-053f5fce="" class="glass" style="width: 169px; height: 70px; top: 264px; left: 374px; transform: rotate(0.0827539turn); opacity: 0.147875;"></div><div data-v-053f5fce="" class="glass" style="width: 85px; height: 175px; top: 127px; left: 1221px; transform: rotate(0.548544turn); opacity: 0.185938;"></div><div data-v-053f5fce="" class="glass" style="width: 83px; height: 136px; top: 561px; left: 383px; transform: rotate(0.0906055turn); opacity: 0.1411;"></div><div data-v-053f5fce="" class="glass" style="width: 64px; height: 158px; top: 395px; left: 409px; transform: rotate(0.703141turn); opacity: 0.1264;"></div><div data-v-053f5fce="" class="glass" style="width: 75px; height: 94px; top: 266px; left: 681px; transform: rotate(0.790118turn); opacity: 0.088125;"></div></div>
-      </div>
+  <div class="header">
+    <h1 class="title" data-aos="fade-up">Self-E[FIX]acy<span id="startNow">Start Now!</span></h1>
+    
+    <div id="particles" class="background">
+      <canvas class="particles-js-canvas-el" style="width: 100%; height: 100%;" width="2850" height="854"></canvas>
+    </div>
   </div>
-
-  <div id="app" class="container">
-    <vc-form id="main-form" ref="main-form"></vc-form>
+  
+  <div id="main">
+    <div id="app" class="container">
+      <vc-form id="main-form" ref="main-form"></vc-form>
+    </div>
   </div>
+  
   <!-- Vue Components-->
   <script type="text/x-template" id="vc-form">
     <form class="row" @submit.prevent="nextPage">
@@ -467,5 +456,6 @@
     </div>
   </script>
   <script src="./js/script.js"></script>
+  <script>AOS.init()</script>
 </body>
 </html>
