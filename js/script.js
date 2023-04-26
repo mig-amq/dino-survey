@@ -7,9 +7,13 @@ const RESULT_RANGE = "range"
 Vue.config.productionTip = true;
 Vue.config.devtools = true;
 
+function random_rgba() {
+  var o = Math.round, r = Math.random, s = 255;
+  return 'rgb(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ')';
+}
+
 $(document).ready(() => {
   const {App, Form, Card, Text} = initVueComponents(Vue)
-
 })
 
 function displayQuestion(_vueObj) {
@@ -37,14 +41,14 @@ function displayQuestion(_vueObj) {
       answers.forEach((val, index) => {
         answers[index] = {
           val: val,
-          prefix: index + 1
+          prefix: (index + 1) + " - "
         }
       })
     } else {
       answers.forEach((val, index) => {
         answers[index] = {
           val: val,
-          prefix: String.fromCharCode(aCharCode + index)
+          prefix: String.fromCharCode(aCharCode + index) + ". "
         }
       })
     }
@@ -56,14 +60,14 @@ function displayQuestion(_vueObj) {
       question.as.forEach((val, index) => {
         question.as[index] = {
           val: val,
-          prefix: index + 1
+          prefix: (index + 1) + " - "
         }
       })
     } else {
       question.as.forEach((val, index) => {
         question.as[index] = {
           val: val,
-          prefix: String.fromCharCode(aCharCode + index)
+          prefix: String.fromCharCode(aCharCode + index) + ". "
         }
       })
     }
@@ -151,16 +155,17 @@ function displayResults(_vueObj) {
 
   let current_survey = _vueObj.session.current_survey
 
+  let subtitle = ""
   _vueObj.$refs.texts = null
 
   if (_vueObj.session.finished && _vueObj.settings.display_all_results_at_end) {
     let texts = []
     let survey_results_keys = Object.keys(_vueObj.survey_results)
-    let subtitle = ""
 
     for (i = survey_results_keys.length - 1; i >= 0; i--) {
       current_survey = _vueObj.survey_keys[i]
       let survey_results = computeResults(current_survey, _vueObj)
+      subtitle = ""
 
       if (current_survey == "self-efficacy-test") {
         let sum = _vueObj.session.answers[current_survey].reduce((prev, curr) => prev + curr, 0)
