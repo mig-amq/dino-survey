@@ -124,11 +124,25 @@ $(document).ready(() => {
   $("#startNow").click(() => scrollTop())
 })
 
-function scrollTop() {
+function scrollTop(_vueObj) {
   $("html, body").animate({
     scrollTop: $("#main").offset().top
   }, 500)
+
+  if (_vueObj) {
+    let color = "#104D5D"
+    if (!_vueObj.session.finished) {
+      if (_vueObj.session.current_survey == 'learning-style-test') {
+        color = "#F75B5A"
+      } else if (_vueObj.session.current_survey == "self-efficacy-test") {
+        color = "#F1A921"
+      }
+    }
+
+    $("#main").css("background-color", color)
+  }
 }
+
 function displayQuestion(_vueObj) {
   console.log("Displaying: Question " + _vueObj.session.current_survey + "-" + _vueObj.session.current_question)
   console.log("Next Page: Page " + _vueObj.session.next_page)
@@ -192,7 +206,7 @@ function displayQuestion(_vueObj) {
     _vueObj.$refs.card.qAns = _vueObj.session.answers[survey.sid][_vueObj.session.current_question]
 
   _vueObj.shownPage = 'card'
-  scrollTop()
+  scrollTop(_vueObj)
 }
 
 function displayPage(_vueObj) {
@@ -200,7 +214,7 @@ function displayPage(_vueObj) {
   console.log("Next Page: Page " + _vueObj.session.next_page)
 
   _vueObj.shownPage = _vueObj.session.current_survey
-  scrollTop()
+  scrollTop(_vueObj)
 }
 
 function answerQuestion(_vueObj) {
@@ -315,7 +329,7 @@ function displayResults(_vueObj) {
   }
 
   // _vueObj.page = 'vc-text'
-  scrollTop()
+  scrollTop(_vueObj)
   _vueObj.shownPage = 'text'
 }
 

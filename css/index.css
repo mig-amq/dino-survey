@@ -44,6 +44,7 @@ body {
   min-height: 100vh;
   background-color: #104D5D;
   color: #fff;
+  transition: background-color ease-in-out 500ms;
 }
 
 #app .card, #app .texts, #app .controls, #app .intro {
