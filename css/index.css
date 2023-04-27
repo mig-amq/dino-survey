@@ -4,6 +4,14 @@
   padding: 0;
 }
 
+body:not(.started) {
+  overflow: hidden;
+}
+
+body.started {
+  overflow-y: auto;
+}
+
 button:not(:disabled):not(.button-primary) {
   background-color: #e2e2e2;
 }
@@ -52,7 +60,7 @@ body {
 }
 
 .header {
-  min-height: 50vh;
+  min-height: 100vh;
   width: 100%;
   position: relative;
   background-color: beige;
@@ -64,7 +72,7 @@ body {
   position: absolute;
   top: 35%;
   font-family: 'Playfair Display', serif;
-  font-size: 5em;
+  font-size: 7em;
   display: flex;
   flex-direction: column;
   align-items: center;

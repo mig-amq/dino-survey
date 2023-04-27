@@ -121,7 +121,14 @@ $(document).ready(() => {
     retina_detect: !0
   })
 
-  $("#startNow").click(() => scrollTop())
+  $("html, body").animate({
+    scrollTop: 0
+  })
+
+  $("#startNow").click(() => {
+    $("body").addClass("started")
+    scrollTop()
+  })
 })
 
 function scrollTop(_vueObj) {
