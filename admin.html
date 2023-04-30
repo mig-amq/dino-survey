@@ -4,16 +4,17 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Survey Questionnaire</title>
+  <title>Survey Questionnaire - Admin Console</title>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js' integrity='sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==' crossorigin='anonymous'></script>
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.14/vue.min.js" integrity="sha512-BAMfk70VjqBkBIyo9UTRLl3TBJ3M0c6uyy2VMUrq370bWs7kchLNN9j1WiJQus9JAJVqcriIUX859JOm12LWtw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.14/vue.js" integrity="sha512-pzaIT4M4pWutHYv8yQrtkMtHBB17qXE6LnS7d9R6oiGQ+zApGM1T+ADe+J9borsHmdMGB3JHhfDsdkavD876nQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
   <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
   <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css' integrity='sha512-EZLkOqwILORob+p0BXZc+Vm3RgJBOe1Iq/0fiI7r/wJgzOFZMlsqTa29UEl6v6U6gsV4uIpsNZoV32YZqrCRCQ==' crossorigin='anonymous'/>
   <link rel="stylesheet" href="./css/admin.css">
+  <script
+src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+</script>
 
   <script>
     // Your web app's Firebase configuration
@@ -38,17 +39,140 @@
   <div class="loading">Loading...</div>
 
   <div id="app" class="container">
-    
+    <vc-result-data></vc-result-data>
+    <vc-results-list></vc-results-list>
   </div>
 
 
   <!-- Vue Components-->
   <script type="text/x-template" id="vc-result-data">
+    <div>
+      <h3 style="text-align: center">Population Data</h3>
+      <div class="all-data row">
+        <div class="learning-style-test-chart six columns">
+          <canvas id="learning_style_chart" style="width:100%;"></canvas>
+        </div>
 
+        <div class="self-efficacy-test-chart six columns">
+          <canvas id="self_efficacy_chart" style="width:100%;"></canvas>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="twelve columns">
+          <table style="margin: 15px auto;">
+            <thead>
+              <th>Data</th>
+              <th>Value</th>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Avg. Self-efficacy Score:</strong></td>
+                <td>
+                  <span v-if="avgSelfEfficacy">{{avgSelfEfficacyScore}}</span>
+                  <span v-else>-</span>
+                </td>
+              </tr> <tr>
+                <td><strong>Avg. Self-efficacy Type:</strong></td>
+                <td>
+                  <span v-if="avgSelfEfficacy">{{avgSelfEfficacy}}</span>
+                  <span v-else>-</span>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Typical Learning Style:</strong></td>
+                <td>
+                  <span v-if="avgLearnStyle">{{avgLearnStyle}}</span>
+                  <span v-else>-</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="result" v-if="result">
+        <p>
+          <strong>Email: {{result.email}}</strong><br/>
+          <strong>Session Status: {{result.finished ? "Completed" : "Incomplete"}}</strong>
+          <button type="button" class="button" @click.stop.prevent="result = null" style="float: right">
+            Close Details
+          </button>
+        </p>
+        <div v-if="result.complete_surveys.includes('learning-style-test')">
+          <h5 style="margin-bottom: 1rem;">Learning Style Answers</h5>
+          <div class="question" v-for="(answer, index) in result.answers['learning-style-test']">
+            Q{{index + 1}}: <i v-html="surveys['learning-style-test'].questions[index].q">{{surveys['learning-style-test'].questions[index].q}}</i>
+            <strong v-if="answer">Answer: {{String.fromCharCode(65 + answer)}}</strong>
+            <strong v-else>Answer: N/A</strong>
+          </div>
+        </div>
+        <div style="margin-top: 2rem" v-if="result.complete_surveys.includes('self-efficacy-test')">
+          <h5 style="margin-bottom: 1rem;">Self-Efficacy Answers</h5>
+          <div class="question" v-for="(answer, index) in result.answers['self-efficacy-test']">
+            Q{{index + 1}}: <i v-html="surveys['self-efficacy-test'].questions[index].q">{{surveys['self-efficacy-test'].questions[index].q}}</i>
+            <strong v-if="answer">Answer: {{answer + 1}}</strong>
+            <strong v-else>Answer: N/A</strong>
+          </div>
+        </div>
+      </div>
+    </div>
   </script>
 
-  <script type="text/x-template" id="vc-result-list">
-    
+  <script type="text/x-template" id="vc-results-list">
+    <form @submit.stop.prevent="search">
+      <div class="row">
+        <div class="nine columns">
+          <input type="text" name="q" id="q" v-model="q" class="u-full-width" placeholder="Enter search query here...">
+        </div>
+        <div class="three columns">
+          <input type="submit" class="button-primary u-full-width" value="Search"/>
+        </div>
+      </div>
+      <div class="row">
+        <div class="twelve columns">
+          <div class="pages">
+            <a @click.stop.prevent="page != curr_page ? selectPage(page) : ''" v-for="(page, ind) in pages" :class="{active: page == curr_page}" :disabled="page == curr_page">
+              {{page}}
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="twelve columns">
+          <table class="u-full-width">
+            <thead>
+              <th>Email</th>
+              <th>Status</th>
+              <th>Learning Style</th>
+              <th>Self-efficacy Score</th>
+              <th>Action</th>
+            </thead>
+            <tbody>
+              <tr v-for="(result, index) in display_results">
+                <td>{{result.email}}</td>
+                <td>{{result.finished ? "Completed" : "Incomplete"}}</td>
+                <td>
+                  <strong v-if="result.complete_surveys.includes('learning-style-test')">
+                    {{result.results['learning-style-test'].title}}
+                  </strong>
+                  <strong v-else>-</strong>
+                </td>
+                <td>
+                  <strong v-if="result.complete_surveys.includes('self-efficacy-test')">
+                    {{result.answers['self-efficacy-test'].reduce((partial, curr) => partial + curr, 0)}}
+                  </strong>
+                  <strong v-else>-</strong>
+                </td>
+                <td>
+                  <button type="button" class="button-primary" @click="loadResult(result)">Load Data</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </form>
   </script>
   
   <script src="./js/admin.js"></script>

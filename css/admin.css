@@ -124,3 +124,47 @@ box-shadow: rgba(255,255,255, 0.75) 1.5em 0 0 0, rgba(255,255,255, 0.75) 1.1em 1
     transform: rotate(360deg);
   }
 }
+
+.pages {
+  display: flex;
+  flex-direction: row;
+}
+
+.pages a {
+  color: #424242;
+  border: 1px solid #888;
+  cursor: pointer;
+  padding: 2px 10px;
+  margin: 0 3px;
+  border-radius: 4px;
+  transition: all ease-out 250ms;
+}
+
+.pages a:not(.active):hover {
+  color: #33C3F0;
+  border-color: #33C3F0;
+}
+
+.pages a.active {
+  cursor: default;
+  color: #fff;
+  background-color: #33C3F0;
+  border-color: #33C3F0;
+}
+
+.all-data {
+  display: flex;
+  flex-direction: row;
+}
+
+.all-data > div {
+  flex: 1 1;
+}
+
+form {
+  margin-top: 50px;
+}
+
+th {
+  text-align: center;
+}
