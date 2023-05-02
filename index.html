@@ -397,7 +397,7 @@
 
   <script type="text/x-template" id="vc-text">
     <div class="texts" v-if="texts">
-      <div class="text row" v-for="(text, index) in texts" style="margin-bottom: 25px;" data-aos="fade-up">
+      <div class="text row" v-for="(text, index) in texts" style="margin-bottom: 25px;">
         <h3 class="title twelve columns" v-if="text.title">{{text.title}}</h3>
         <h5 class="subtitle twelve columns" v-if="text.subtitle">{{text.subtitle}}</h5><br/><br/>
         <div class="text-image" v-if="text.image">
@@ -425,17 +425,17 @@
     </div>
     <div class="texts" v-else>
       <div class="text row">
-        <h3 class="title twelve columns" v-if="title"  data-aos="fade-up">{{title}}</h3>
-        <h5 class="subtitle twelve columns" v-if="subtitle"  data-aos="fade-up">{{subtitle}}</h5><br/><br/>
-        <div class="text-image" v-if="image"  data-aos="fade-up">
+        <h3 class="title twelve columns" v-if="title">{{title}}</h3>
+        <h5 class="subtitle twelve columns" v-if="subtitle">{{subtitle}}</h5><br/><br/>
+        <div class="text-image" v-if="image">
           <img :src="'./img/{{image}}'" alt="">
         </div>
-        <div class="content twelve columns" v-html="content"  data-aos="fade-up">
+        <div class="content twelve columns" v-html="content">
           {{content}}
         </div>
         <div class="additional-info twelve columns" v-if="additionalInfo" style="margin-top: 25px;">
           <ul>
-            <li v-for="(addInfo, index) in additionalInfo" style="padding: 15px 0; display: block;"  data-aos="fade-up">
+            <li v-for="(addInfo, index) in additionalInfo" style="padding: 15px 0; display: block;">
               <div class="result-additional">
                 <div class="result-image" v-if="addInfo.image">
                   <img :src="'./img/' + addInfo.image" :alt="addInfo.title" width="100%" height="auto">
