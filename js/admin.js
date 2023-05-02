@@ -153,6 +153,8 @@ function initVueComponents(_V) {
       this.$root.$on("initialise", this.initialise)
 
       this.$root.$on("load", this.load)
+
+      this.$root.$on("clear_result_display", this.clear_result_display)
     },
     computed: {
       avgSelfEfficacyScore() {
@@ -234,6 +236,9 @@ function initVueComponents(_V) {
       }
     },
     methods: {
+      clear_result_display() {
+        this.result = null
+      },
       initialise(surveys, survey_results, all_data) {
         let lsDataset = [0, 0, 0]
         var barColors = [
@@ -360,7 +365,10 @@ function initVueComponents(_V) {
     methods: {
       search() {
         toggleLoading()
+        this.$root.$emit("clear_result_display")
+        
         getResults(this).then(function(data) {
+
           let _results = data
           let condition = new RegExp(this.q)
 

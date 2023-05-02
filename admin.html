@@ -99,19 +99,21 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
             Close Details
           </button>
         </p>
-        <div v-if="result.complete_surveys.includes('learning-style-test')">
-          <h5 style="margin-bottom: 1rem;">Learning Style Answers</h5>
+        <div>
+          <h5 style="margin-bottom: 0.5rem;">Learning Style Answers</h5>
+          <h6>Status: {{result.complete_surveys.includes("learning-style-test") ? "Completed" : "Incomplete"}}</h6>
           <div class="question" v-for="(answer, index) in result.answers['learning-style-test']">
             Q{{index + 1}}: <i v-html="surveys['learning-style-test'].questions[index].q">{{surveys['learning-style-test'].questions[index].q}}</i>
-            <strong v-if="answer">Answer: {{String.fromCharCode(65 + answer)}}</strong>
+            <strong v-if="answer">Answer: {{String.fromCharCode(65 + answer - 1)}}</strong>
             <strong v-else>Answer: N/A</strong>
           </div>
         </div>
-        <div style="margin-top: 2rem" v-if="result.complete_surveys.includes('self-efficacy-test')">
+        <div style="margin-top: 2rem">
           <h5 style="margin-bottom: 1rem;">Self-Efficacy Answers</h5>
+          <h6>Status: {{result.complete_surveys.includes("self-efficacy-test") ? "Completed" : "Incomplete"}}</h6>
           <div class="question" v-for="(answer, index) in result.answers['self-efficacy-test']">
             Q{{index + 1}}: <i v-html="surveys['self-efficacy-test'].questions[index].q">{{surveys['self-efficacy-test'].questions[index].q}}</i>
-            <strong v-if="answer">Answer: {{answer + 1}}</strong>
+            <strong v-if="answer">Answer: {{answer}}</strong>
             <strong v-else>Answer: N/A</strong>
           </div>
         </div>
